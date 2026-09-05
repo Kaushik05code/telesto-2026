@@ -32,7 +32,8 @@
   const SECTIONS = [
     { id: 'hero', label: 'Arrival', p: 0.05, dir: 1 },
     { id: 'about', label: 'The Singularity', p: 0.32, dir: 1 },
-    { id: 'events', label: 'Events', p: 0.6, dir: 1 },
+    { id: 'events', label: 'Events', p: 0.55, dir: 1 },
+    { id: 'prizes', label: 'Prizes & Fees', p: 0.78, dir: 1 },
     { id: 'schedule', label: 'Totality', p: 1, dir: 1 },
     { id: 'rankings-teaser', label: 'Live Board', p: 0.58, dir: -1 },
     { id: 'sponsors', label: 'Partners', p: 0.26, dir: -1 }
@@ -77,7 +78,7 @@
   (function countdown() {
     const box = $('#countdown');
     if (!box) return;
-    const start = new Date('2026-09-09T08:30:00+05:30').getTime();
+    const start = new Date('2026-09-09T08:00:00+05:30').getTime();
     const end = new Date('2026-09-10T17:00:00+05:30').getTime();
     const cells = {
       d: $('[data-cd="d"]', box), h: $('[data-cd="h"]', box),
@@ -109,8 +110,9 @@
   if (!Cosmos.reduced && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver(es => es.forEach(e => {
       if (!e.isIntersecting) return;
-      const el = e.target, end = parseInt(el.textContent, 10);
-      if (isNaN(end)) { io.unobserve(el); return; }
+      const el = e.target;
+      if (!/^\d+$/.test(el.textContent)) { io.unobserve(el); return; }  // skip 115+, ₹2.5L
+      const end = parseInt(el.textContent, 10);
       const pad = el.textContent.length, t0 = performance.now(), dur = 900;
       requestAnimationFrame(function tick(t) {
         const k = Math.min(1, Math.max(0, (t - t0) / dur));

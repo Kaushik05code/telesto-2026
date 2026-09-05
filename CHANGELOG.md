@@ -1,5 +1,16 @@
 # Changelog — Telesto 2026 Website
 
+## v3 — 6 Sep 2026 · Real content from the official brochure
+
+Installed poppler and extracted the full brochure text (`docs/brochure-text-extract.txt`). Replaced all invented copy with real facts:
+
+- **Events**: the real three verticals — Multitasking Event / Best Management Team (offline, UG, four solo domains: Best Manager, Entrepreneurship Development, Wealth Management, HR/Marketing), Business Case (online + on-campus, UG & PG, teams of 3, prelims from 5 Sep), Business Quiz (offline, teams of 2). "Contingent" corrected: it's the BMT + Quiz registration bundle, not an event — now a delegation call-out.
+- **New Prizes & Fees section**: ₹2.5 lakh cash pool + verified fee table (BMT 6k/10k, Quiz 2.5k/5k, Case 3k/6k, Contingent 8k/14k; outstation includes accommodation).
+- **Schedule**: added "The Approach" online phase (5 Sep prelim, 7 Sep submission, 8 Sep final round); real 8:00 am reporting both days; unverified clock times replaced with honest AM/DAY/PM/CLOSE slots.
+- **Register section**: real CHRIST-portal steps, the four scannable registration QR codes (cropped from the official poster), all four contacts with tel: links, and ground rules (IDs, formal attire, team caps).
+- **About**: since 2017, international-level, 115+ campus victories. Removed the invented email address site-wide; footer now carries real phone contacts.
+- Countdown & structured data aligned to the real 08:00 IST start.
+
 ## v2 — 6 Sep 2026
 
 **Landing page**
