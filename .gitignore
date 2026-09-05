@@ -1,0 +1,4 @@
+# Big unchanging source material stays out of git (kept on disk in docs/source/)
+docs/source/
+versions/
+.DS_Store

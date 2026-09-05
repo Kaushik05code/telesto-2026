@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Gravity Board — TELESTO 2026 Live Rankings</title>
+<meta name="description" content="Live standings for TELESTO 2026 · The Noctis Singularity. Ten finalist teams, updating in real time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Michroma&family=Poppins:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/telesto.css">
+<link rel="stylesheet" href="css/rankings.css">
+<link rel="icon" href="assets/logo-telesto.png">
+</head>
+<body>
+<a class="skip" href="#board">Skip to standings</a>
+<canvas id="starfield" aria-hidden="true"></canvas>
+<div class="void" aria-hidden="true"></div>
+
+<!-- NAV -->
+<header class="nav scrolled" id="nav">
+  <a class="nav-brand" href="index.html" aria-label="Telesto 2026 home">
+    <img src="assets/logo-telesto.png" alt="">
+    <span class="wm">TELESTO&nbsp;<b>26</b></span>
+  </a>
+  <nav class="nav-links" id="navlinks" aria-label="Primary">
+    <a href="index.html#about">The Singularity</a>
+    <a href="index.html#events">Events</a>
+    <a href="index.html#schedule">Schedule</a>
+    <a href="rankings.html" class="live-link" aria-current="page"><span class="livedot"></span>Live Rankings</a>
+    <a href="index.html#register" class="btn btn-gold nav-cta">Register</a>
+  </nav>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h18M4 13h18M4 18h18"/></svg>
+  </button>
+</header>
+
+<main class="page">
+  <section class="board-hero board-wrap">
+    <span class="eyebrow center">Live Standings · The Noctis Singularity</span>
+    <h1>The Gravity <span class="g">Board</span></h1>
+    <p class="sub">Ten finalist teams pulled toward one event horizon. Scores land in real time — the leader sits closest to the singularity.</p>
+    <div class="status" id="status">
+      <span class="chip live"><span class="livedot"></span> Live</span>
+      <span class="chip round" id="roundChip">Round —</span>
+      <span class="chip">Updated <b id="updatedAt">—</b></span>
+    </div>
+  </section>
+
+  <div class="board-wrap">
+    <!-- top 3 -->
+    <div class="podium" id="podium" aria-hidden="true"></div>
+
+    <!-- full board -->
+    <div class="board-legend" aria-hidden="true">
+      <span>Rank</span><span class="l-delta">Δ</span><span>Team</span><span class="r-score">Score</span>
+    </div>
+    <ol class="board" id="board" aria-label="Team standings, ranked by score"></ol>
+
+    <p class="sr-only" role="status" aria-live="polite" id="live"></p>
+
+    <div class="board-foot">
+      <span>Auto-refresh every few seconds · <a href="index.html">Back to Telesto 2026</a></span>
+      <span id="srcNote">Source: scores.json</span>
+    </div>
+  </div>
+</main>
+
+<!-- Judge console -->
+<button class="console-btn" id="consoleBtn" aria-expanded="false" aria-controls="console">⊕ Judge Console</button>
+<div class="console-host">
+<aside class="console" id="console" aria-label="Judge scoring console">
+  <button class="close" id="consoleClose" aria-label="Close console">×</button>
+  <h3>Judge Console</h3>
+  <p class="hint">Award or deduct points and the board updates live for everyone watching in this browser. Changes are saved locally.</p>
+  <div id="jlist"></div>
+  <div class="sim">
+    <span>Simulate live scoring</span>
+    <button class="toggle" id="simToggle" role="switch" aria-checked="false" aria-label="Simulate live scoring"></button>
+  </div>
+  <button class="reset" id="resetBtn">Reset to scores.json</button>
+</aside>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="wm-big">Telesto 2026</div>
+      <p class="footer-tag">“In all chaos there is a cosmos, in all disorder a secret order.”</p>
+      <div class="crests">
+        <img src="assets/logo-cusbma.png" alt="CUSBMA">
+        <img src="assets/logo-christ.png" alt="CHRIST (Deemed to be University)">
+      </div>
+    </div>
+    <div>
+      <h4>Navigate</h4>
+      <p><a href="index.html#about">The Singularity</a></p>
+      <p><a href="index.html#events">Events</a></p>
+      <p><a href="index.html#schedule">Schedule</a></p>
+      <p><a href="rankings.html">Live Rankings</a></p>
+    </div>
+    <div>
+      <h4>Find Us</h4>
+      <p>CHRIST (Deemed to be University)<br>Bannerghatta Road Campus<br>Bengaluru, Karnataka</p>
+      <p>09 – 10 September 2026</p>
+    </div>
+  </div>
+  <div class="footer-base">
+    <span>© 2026 CUSBMA · Christ University School of Business &amp; Management Association</span>
+    <span class="mono">THE NOCTIS SINGULARITY</span>
+  </div>
+</footer>
+
+<script src="js/cosmos.js"></script>
+<script src="js/rankings.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "round": "Business Quiz · Finals",
+  "updated": "2026-09-10T14:22:00+05:30",
+  "teams": [
+    { "id": "nova",    "name": "Nova Syndicate",   "tag": "T-01 · MBA Fin",  "score": 482 },
+    { "id": "quasar",  "name": "Quasar Capital",   "tag": "T-02 · MBA Mktg", "score": 441 },
+    { "id": "horizon", "name": "Event Horizon",    "tag": "T-03 · BBA",      "score": 418 },
+    { "id": "redshift","name": "Redshift Partners","tag": "T-04 · MBA Ops",  "score": 370 },
+    { "id": "orion",   "name": "Orion Ventures",   "tag": "T-05 · MBA Fin",  "score": 344 },
+    { "id": "perihel", "name": "Perihelion",       "tag": "T-06 · BBA",      "score": 305 },
+    { "id": "lagrange","name": "Lagrange Point",   "tag": "T-07 · MBA HR",   "score": 288 },
+    { "id": "zenith",  "name": "Zenith Collective","tag": "T-08 · MBA Mktg", "score": 261 },
+    { "id": "pulsar",  "name": "Pulsar Group",     "tag": "T-09 · BBA",      "score": 224 },
+    { "id": "vela",    "name": "Vela Analytics",   "tag": "T-10 · MBA Ops",  "score": 197 }
+  ]
+}
