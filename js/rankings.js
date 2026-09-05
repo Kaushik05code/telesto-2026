@@ -34,6 +34,7 @@
 
   let state = null;           // current data
   let rankOf = {};            // id -> previous rank (0-based)
+  let prevScores = null;      // id -> score at last apply (for the transmission log)
   let rows = {};              // id -> row element
   let leaderId = null;
   let usingLocal = false;
@@ -169,23 +170,57 @@
 
     // announce leader changes
     if (order[0] && order[0].id !== leaderId) {
-      if (leaderId !== null) $('#live').textContent = `${order[0].name} takes the lead with ${order[0].score} points.`;
+      if (leaderId !== null) {
+        $('#live').textContent = `${order[0].name} takes the lead with ${order[0].score} points.`;
+        logTx(`<b>${esc(order[0].name)}</b> takes the event horizon`, null);
+      }
       leaderId = order[0].id;
     }
+
+    // transmission log — diff scores vs the previous apply
+    if (prevScores) {
+      state.teams.forEach(t => {
+        const old = prevScores[t.id];
+        if (old !== undefined && old !== t.score) {
+          const d = t.score - old;
+          logTx(`<b>${esc(t.name)}</b> ${d > 0 ? 'scores' : 'penalised'}`, d);
+        }
+      });
+    }
+    prevScores = {};
+    state.teams.forEach(t => prevScores[t.id] = t.score);
+  }
+
+  function logTx(msgHTML, delta) {
+    const list = $('#txlist');
+    if (!list) return;
+    const empty = list.querySelector('.tx.empty');
+    if (empty) empty.remove();
+    const li = document.createElement('li');
+    li.className = 'tx fresh';
+    li.innerHTML =
+      `<span class="tx-t">${fmtTime(null)}</span>` +
+      `<span class="tx-msg">${msgHTML}</span>` +
+      (delta === null ? '<span class="tx-pts">◐</span>'
+        : `<span class="tx-pts${delta < 0 ? ' neg' : ''}">${delta > 0 ? '+' : ''}${delta}</span>`);
+    list.prepend(li);
+    while (list.children.length > 30) list.lastElementChild.remove();
   }
 
   function countUp(el, from, to, instant) {
     el.dataset.v = to;
+    const run = el._cuRun = (el._cuRun || 0) + 1;   // cancel any in-flight run
     const write = v => el.firstChild.nodeValue = String(v);
     if (instant || reduced || from === to) { write(to); return; }
     el.classList.add('bump'); el.closest('.row').classList.add('bump');
     const t0 = performance.now(), dur = 700;
-    (function tick(t) {
-      const k = Math.min(1, (t - t0) / dur);
+    requestAnimationFrame(function tick(t) {
+      if (el._cuRun !== run) return;
+      const k = Math.min(1, Math.max(0, (t - t0) / dur));  // clamp both ends
       write(Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3))));
       if (k < 1) requestAnimationFrame(tick);
       else setTimeout(() => { el.classList.remove('bump'); el.closest('.row').classList.remove('bump'); }, 300);
-    })(t0);
+    });
   }
 
   function renderPodium(order, mx) {
@@ -289,6 +324,36 @@
   function updateSrcNote() {
     $('#srcNote').textContent = usingLocal ? 'Source: Judge Console (local)' : 'Source: scores.json';
   }
+
+  /* ---------- projector mode ---------- */
+  (function projector() {
+    const btn = $('#projBtn');
+    if (!btn) return;
+    async function toggleProj() {
+      const on = !document.body.classList.contains('projector');
+      document.body.classList.toggle('projector', on);
+      btn.textContent = on ? '⛶ Exit projector' : '⛶ Projector';
+      try {
+        if (on && !document.fullscreenElement) await document.documentElement.requestFullscreen();
+        else if (!on && document.fullscreenElement) await document.exitFullscreen();
+      } catch (e) { /* fullscreen may be blocked; class-based mode still applies */ }
+    }
+    btn.addEventListener('click', toggleProj);
+    if (location.search.includes('projector')) {       // boot straight into projector view
+      document.body.classList.add('projector');
+      btn.textContent = '⛶ Exit projector';
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key.toLowerCase() === 'p' && !e.metaKey && !e.ctrlKey &&
+          !/^(input|textarea|select)$/i.test(document.activeElement.tagName)) toggleProj();
+    });
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement && document.body.classList.contains('projector')) {
+        document.body.classList.remove('projector');
+        btn.textContent = '⛶ Projector';
+      }
+    });
+  })();
 
   /* ---------- utils ---------- */
   let seed = 20260910;

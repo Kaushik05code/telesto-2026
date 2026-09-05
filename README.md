@@ -21,6 +21,17 @@ python3 -m http.server 8000
 
 Upload the whole folder to any static host — GitHub Pages, Netlify, Vercel, or a campus web server. No configuration needed.
 
+## Versions — revert anytime
+
+The repo is under git; every stable state is tagged.
+
+```bash
+git tag                 # list versions (v1, v2, …)
+git checkout v1 -- .    # restore everything to version 1
+```
+
+There's also a plain zip of v1 at `versions/telesto-v1.zip` if you'd rather not touch git. Full history of changes: `CHANGELOG.md`.
+
 ## The live rankings — three ways to drive it
 
 Open **`rankings.html`**. The board re-ranks teams by score, animates the bars, and slides rows past each other when a team overtakes another. There are three ways to make scores change live:
@@ -30,6 +41,8 @@ Open **`rankings.html`**. The board re-ranks teams by score, animates the bars, 
 2. **Judge Console** — click **⊕ Judge Console** (bottom-right) or open `rankings.html#console`. Award or deduct points per team and the board updates instantly. Changes are saved in the browser and broadcast to every open tab in that browser — so you can run the **projector on one tab and score from another**. Use **Reset to scores.json** to clear local edits.
 
 3. **Simulate** — flip *Simulate live scoring* in the console (or open `rankings.html?demo`) to auto-generate score changes. For rehearsals, demos, and screenshots only.
+
+On the day: press **P** (or the ⛶ Projector chip) for a fullscreen, big-type view built for the venue screen, and watch the **Transmission Log** under the board narrate every score event as it lands.
 
 ### Going fully live with a backend
 

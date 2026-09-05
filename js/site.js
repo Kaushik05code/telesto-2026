@@ -73,6 +73,37 @@
     if (mark) mark.insertAdjacentHTML('afterbegin', Cosmos.phaseSVG(p, 1));
   });
 
+  /* ---------- Countdown to first contact ---------- */
+  (function countdown() {
+    const box = $('#countdown');
+    if (!box) return;
+    const start = new Date('2026-09-09T08:30:00+05:30').getTime();
+    const end = new Date('2026-09-10T17:00:00+05:30').getTime();
+    const cells = {
+      d: $('[data-cd="d"]', box), h: $('[data-cd="h"]', box),
+      m: $('[data-cd="m"]', box), s: $('[data-cd="s"]', box)
+    };
+    function tick() {
+      const now = Date.now();
+      if (now >= start && now <= end) {
+        box.classList.add('live-now');
+        box.innerHTML = '◐ The Singularity is live — <a href="rankings.html" style="color:inherit;text-decoration:underline">follow the board</a>';
+        return;
+      }
+      if (now > end) { box.remove(); return; }
+      let t = Math.floor((start - now) / 1000);
+      const d = Math.floor(t / 86400); t -= d * 86400;
+      const h = Math.floor(t / 3600); t -= h * 3600;
+      const m = Math.floor(t / 60), s = t - m * 60;
+      cells.d.textContent = String(d).padStart(2, '0');
+      cells.h.textContent = String(h).padStart(2, '0');
+      cells.m.textContent = String(m).padStart(2, '0');
+      cells.s.textContent = String(s).padStart(2, '0');
+      setTimeout(tick, 1000);
+    }
+    tick();
+  })();
+
   /* count-up for stat numbers */
   const nums = $$('.about-stats .n');
   if (!Cosmos.reduced && 'IntersectionObserver' in window) {
@@ -81,12 +112,12 @@
       const el = e.target, end = parseInt(el.textContent, 10);
       if (isNaN(end)) { io.unobserve(el); return; }
       const pad = el.textContent.length, t0 = performance.now(), dur = 900;
-      (function tick(t) {
-        const k = Math.min(1, (t - t0) / dur);
+      requestAnimationFrame(function tick(t) {
+        const k = Math.min(1, Math.max(0, (t - t0) / dur));
         const v = Math.round(end * (1 - Math.pow(1 - k, 3)));
         el.textContent = String(v).padStart(pad, '0');
         if (k < 1) requestAnimationFrame(tick);
-      })(t0);
+      });
       io.unobserve(el);
     }), { threshold: 0.6 });
     nums.forEach(n => io.observe(n));

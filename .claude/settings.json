@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -m http.server:*)",
+      "Bash(curl -s -o /dev/null*localhost*)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git tag:*)",
+      "Bash(ls:*)",
+      "Bash(/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --headless*)"
+    ]
+  }
+}

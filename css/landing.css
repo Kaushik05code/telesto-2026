@@ -95,6 +95,24 @@
   opacity:0;animation:rise 1s .86s var(--ease) forwards;
 }
 .hero-meta .dot{width:4px;height:4px;border-radius:50%;background:var(--violet-muted)}
+.countdown{
+  margin-top:2.1rem;display:flex;align-items:flex-start;gap:clamp(.5rem,1.6vw,1.1rem);
+  opacity:0;animation:rise 1s .92s var(--ease) forwards;
+}
+.cd-cell{display:flex;flex-direction:column;align-items:center;gap:.4rem;min-width:3.2ch}
+.cd-n{
+  font-family:var(--f-mono);font-size:clamp(1.4rem,1rem + 2vw,2.2rem);
+  color:var(--white);line-height:1;font-variant-numeric:tabular-nums;
+  text-shadow:0 0 24px rgba(179,141,227,.45);
+}
+.cd-l{font-family:var(--f-cere);font-size:.58rem;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--ink-faint);font-weight:600}
+.cd-sep{font-family:var(--f-mono);font-size:clamp(1.2rem,1rem + 1.6vw,1.9rem);
+  color:var(--gold);line-height:1.1}
+.countdown.live-now{
+  font-family:var(--f-cere);color:var(--gold-light);font-size:1.05rem;
+  letter-spacing:.3em;text-transform:uppercase;
+}
 .hero-cta{
   margin-top:2.6rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;
   opacity:0;animation:rise 1s .98s var(--ease) forwards;
@@ -112,9 +130,16 @@
 @keyframes drop{0%{transform:scaleY(0);transform-origin:top}
   50%{transform:scaleY(1);transform-origin:top}
   50.1%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+/* Show hero copy instantly: reduced motion, and the ?static capture hook.
+   Targeted list — a bare `.hero *` would strip the orbits' centering transform. */
 @media (prefers-reduced-motion:reduce){
-  .hero *{animation:none!important;opacity:1!important;transform:none!important}
+  .hero .eyebrow,.hero-title,.hero-sub,.hero-tag,.hero-meta,.countdown,.hero-cta{
+    animation:none!important;opacity:1!important;transform:none!important}
+  .hero-scroll .bar,.hero .livedot{animation:none!important}
 }
+.force-in .hero .eyebrow,.force-in .hero-title,.force-in .hero-sub,.force-in .hero-tag,
+.force-in .hero-meta,.force-in .countdown,.force-in .hero-cta{
+  animation:none!important;opacity:1!important;transform:none!important}
 
 /* ============ ECLIPSE-PHASE SPINE (signature) ============ */
 .spine{
