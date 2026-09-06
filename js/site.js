@@ -88,7 +88,7 @@
       const now = Date.now();
       if (now >= start && now <= end) {
         box.classList.add('live-now');
-        box.innerHTML = '◐ The Singularity is live — <a href="rankings.html" style="color:inherit;text-decoration:underline">follow the board</a>';
+        box.innerHTML = '◐ The Singularity is live — <a href="rankings.html">follow the board</a>';
         return;
       }
       if (now > end) { box.remove(); return; }

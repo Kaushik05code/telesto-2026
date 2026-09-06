@@ -257,6 +257,13 @@ p{margin:0}
 
 /* shared section wrapper */
 .shell{max-width:var(--maxw);margin:0 auto;padding:0 var(--edge)}
+
+/* 404 */
+.e404{min-height:100svh;display:grid;place-items:center;text-align:center;padding:2rem var(--edge)}
+.e404-title{font-size:clamp(5rem,20vw,12rem);color:var(--white);margin:1rem 0 .6rem}
+.e404-sub{font-family:var(--f-cere);font-style:italic;color:var(--lavender);
+  font-size:1.1rem;margin-bottom:2.2rem}
+.e404-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
 .skip{position:absolute;left:-999px;top:0}
 .skip:focus{left:var(--edge);top:.6rem;z-index:99;background:var(--gold);
   color:#1c1204;padding:.6em 1em;border-radius:2px}

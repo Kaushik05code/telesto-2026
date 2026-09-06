@@ -4,6 +4,7 @@
 
 /* generic section rhythm (single source of truth for vertical pad) */
 .section{padding:clamp(5rem,4rem + 6vw,9rem) 0;position:relative}
+.center-head{text-align:center;margin-inline:auto}
 .force-in .hero{min-height:560px}   /* dev: capture full page in one shot */
 .section-head{max-width:60ch;margin-bottom:clamp(2.2rem,4vw,3.6rem)}
 .section-head .eyebrow{margin-bottom:1.1rem}
@@ -113,6 +114,7 @@
   font-family:var(--f-cere);color:var(--gold-light);font-size:1.05rem;
   letter-spacing:.3em;text-transform:uppercase;
 }
+.countdown.live-now a{color:inherit;text-decoration:underline}
 .hero-cta{
   margin-top:2.6rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;
   opacity:0;animation:rise 1s .98s var(--ease) forwards;
@@ -351,6 +353,11 @@
 .mini-row .fill{height:100%;border-radius:5px;background:var(--corona);
   width:var(--w);transform-origin:left;animation:grow 1.2s var(--ease) both}
 .mini-row.lead .fill{box-shadow:0 0 16px rgba(230,187,126,.6)}
+.mini-row:nth-child(1) .fill{--w:96%}
+.mini-row:nth-child(2) .fill{--w:88%}
+.mini-row:nth-child(3) .fill{--w:74%}
+.mini-row:nth-child(4) .fill{--w:61%}
+.mini-row:nth-child(5) .fill{--w:52%}
 .mini-row .s{font-family:var(--f-mono);font-size:.74rem;color:var(--ink);min-width:3ch;text-align:right}
 @keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @media (max-width:820px){.teaser-grid{grid-template-columns:1fr;gap:2.2rem}}
