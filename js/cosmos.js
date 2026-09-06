@@ -54,7 +54,7 @@ window.Cosmos = (function () {
 
       /* shooting stars — frequent, up to a few at once, shallow diagonals with fading tails */
       if (!reduced) {
-        if (meteors.length < 3 && --nextMeteor <= 0) {
+        if (meteors.length < 6 && --nextMeteor <= 0) {
           const fromLeft = Math.random() < 0.5;
           meteors.push({
             x: fromLeft ? -40 * dpr : w * (0.3 + Math.random() * 0.7),
@@ -63,7 +63,7 @@ window.Cosmos = (function () {
             vy: (5 + Math.random() * 4) * dpr,
             life: 1
           });
-          nextMeteor = 50 + Math.random() * 130;    // ~1–3s at 60fps
+          nextMeteor = 60;                          // one per second at 60fps
         }
         for (const m of meteors) {
           const tail = 12;
