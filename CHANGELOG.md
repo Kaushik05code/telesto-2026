@@ -1,5 +1,12 @@
 # Changelog — Telesto 2026 Website
 
+## v4 — 6 Sep 2026 · Security hardening + live deployment
+
+- **Live at https://kaushik05code.github.io/telesto-2026/** (GitHub Pages, free, HTTPS enforced, HSTS).
+- Fonts self-hosted (20 woff2 files, 268 KB) — no third-party requests at runtime, works offline at the venue.
+- Strict Content-Security-Policy + referrer policy on every page; all inline styles removed so `style-src 'self'` holds; `innerHTML` paths audited (all escaped or static).
+- `robots.txt`, `.nojekyll`, themed 404 page. JSON-LD event description corrected to the three real verticals.
+
 ## v3 — 6 Sep 2026 · Real content from the official brochure
 
 Installed poppler and extracted the full brochure text (`docs/brochure-text-extract.txt`). Replaced all invented copy with real facts:

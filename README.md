@@ -17,9 +17,17 @@ python3 -m http.server 8000
 # then open http://localhost:8000/index.html
 ```
 
-## Deploy
+## Live site
 
-Upload the whole folder to any static host — GitHub Pages, Netlify, Vercel, or a campus web server. No configuration needed.
+**https://kaushik05code.github.io/telesto-2026/** — hosted free on GitHub Pages (repo: `Kaushik05code/telesto-2026`), HTTPS enforced, served from GitHub's India edge.
+
+To publish changes: commit and `git push` — Pages redeploys automatically in ~30–60 seconds. That's also how you update live scores for everyone: edit `data/scores.json`, push, and every open browser picks it up within seconds of the deploy.
+
+> For the venue projector, prefer running locally (`python3 -m http.server 8000`) — the Judge Console then updates the projector tab instantly, no push needed.
+
+### Security posture
+
+Static site, no backend, no secrets. Hardened with: strict Content-Security-Policy on every page (only same-origin scripts/styles/images/fonts; no inline scripts; `object-src 'none'`), self-hosted fonts (zero third-party requests at runtime), referrer policy, all dynamic text HTML-escaped before rendering, HSTS + enforced HTTPS from GitHub Pages. The Judge Console only ever affects the viewer's own browser — the shared source of truth is `scores.json` in the repo.
 
 ## Versions — revert anytime
 
