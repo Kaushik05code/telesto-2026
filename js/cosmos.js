@@ -9,7 +9,7 @@ window.Cosmos = (function () {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let w, h, dpr, stars = [], t = 0, mx = 0, my = 0, raf;
-    let meteor = null, nextMeteor = 400;   // frames until next shooting star
+    let meteors = [], nextMeteor = 60;     // frames until next shooting star
 
     function resize() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -52,21 +52,21 @@ window.Cosmos = (function () {
         if (!reduced) { s.y += s.sp * 0.12 * dpr; if (s.y > h + 4) s.y = -4; }
       }
 
-      /* shooting star — rare, one at a time, shallow diagonal with fading tail */
+      /* shooting stars — frequent, up to a few at once, shallow diagonals with fading tails */
       if (!reduced) {
-        if (!meteor && --nextMeteor <= 0) {
+        if (meteors.length < 3 && --nextMeteor <= 0) {
           const fromLeft = Math.random() < 0.5;
-          meteor = {
+          meteors.push({
             x: fromLeft ? -40 * dpr : w * (0.3 + Math.random() * 0.7),
-            y: h * Math.random() * 0.45,
+            y: h * Math.random() * 0.55,
             vx: (fromLeft ? 1 : -1) * (14 + Math.random() * 8) * dpr,
             vy: (5 + Math.random() * 4) * dpr,
             life: 1
-          };
-          nextMeteor = 500 + Math.random() * 900;   // ~8–23s at 60fps
+          });
+          nextMeteor = 50 + Math.random() * 130;    // ~1–3s at 60fps
         }
-        if (meteor) {
-          const m = meteor, tail = 12;
+        for (const m of meteors) {
+          const tail = 12;
           const g = ctx.createLinearGradient(m.x, m.y, m.x - m.vx * tail, m.y - m.vy * tail);
           g.addColorStop(0, `rgba(230,187,126,${(0.85 * m.life).toFixed(3)})`);
           g.addColorStop(1, 'rgba(230,187,126,0)');
@@ -77,8 +77,9 @@ window.Cosmos = (function () {
           ctx.lineTo(m.x - m.vx * tail, m.y - m.vy * tail);
           ctx.stroke();
           m.x += m.vx; m.y += m.vy; m.life *= 0.985;
-          if (m.x < -60 * dpr || m.x > w + 60 * dpr || m.y > h * 0.75 || m.life < 0.05) meteor = null;
         }
+        meteors = meteors.filter(m =>
+          m.x > -60 * dpr && m.x < w + 60 * dpr && m.y < h * 0.85 && m.life > 0.05);
       }
       t++;
       raf = requestAnimationFrame(frame);
