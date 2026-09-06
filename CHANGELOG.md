@@ -1,5 +1,10 @@
 # Changelog — Telesto 2026 Website
 
+## v5 — 6 Sep 2026 · Tighter copy + every-screen polish
+
+- Copy cut roughly in half site-wide: hero (dropped quote + slimmer meta), about condensed to one paragraph, event cards, schedule notes, register steps, ground rules, rankings sub/console hints.
+- Responsive pass for all sizes: hero lockup now wraps and centers cleanly at every width; tablet events layout (BMT full-width, Case + Quiz paired); fee table scrolls horizontally on narrow phones; nav compressed at 861–1040px; short-viewport (landscape phone) hero compression; smaller minimum title size for ≤400px phones.
+
 ## v4 — 6 Sep 2026 · Security hardening + live deployment
 
 - **Live at https://kaushik05code.github.io/telesto-2026/** (GitHub Pages, free, HTTPS enforced, HSTS).
