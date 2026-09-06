@@ -20,7 +20,8 @@
 .hero-eclipse{
   position:absolute;top:48%;left:50%;
   width:min(86vmin,760px);aspect-ratio:1;
-  transform:translate(-50%,-50%);
+  /* --px/--py: pointer parallax · --sy: scroll drift (set from JS) */
+  transform:translate(calc(-50% + var(--px,0px)),calc(-50% + var(--py,0px) + var(--sy,0px)));
   z-index:0;pointer-events:none;
 }
 .hero-eclipse .eclipse-img{
@@ -38,7 +39,13 @@
   position:absolute;top:50%;left:50%;border-radius:50%;
   border:1px solid var(--hairline);
   transform:translate(-50%,-50%);
+  opacity:0;transition:opacity 1.8s var(--ease);
 }
+.loaded .orbit-1{opacity:1;transition-delay:.5s}
+.loaded .orbit-2{opacity:1;transition-delay:.9s}
+.loaded .orbit-3{opacity:1;transition-delay:1.3s}
+.force-in .orbit{opacity:1;transition:none}
+@media (prefers-reduced-motion:reduce){.orbit{opacity:1;transition:none}}
 .orbit-1{width:112%;height:112%;border-color:rgba(179,141,227,.16)}
 .orbit-2{width:132%;height:132%;border-color:rgba(190,115,5,.12);
   border-style:dashed}
@@ -251,6 +258,7 @@
   border-radius:50%;border:1px solid var(--hairline);
   transition:border-color .5s var(--ease),transform .6s var(--ease);
 }
+.ev.tilting{transition:border-color .5s var(--ease),box-shadow .5s var(--ease)}
 .ev:hover{transform:translateY(-6px);border-color:var(--hairline-2);
   box-shadow:0 24px 60px -30px rgba(81,50,120,.8)}
 .ev:hover::after{border-color:var(--gold-hairline);transform:scale(1.15)}
@@ -468,3 +476,46 @@
   .qr-grid{max-width:360px;margin:0 auto}
   .ground-rules{flex-direction:column;align-items:flex-start;gap:.55rem}
 }
+
+
+/* ================= MOTION LAYER (v6) ================= */
+.cd-n.tick{animation:cdtick .45s var(--ease)}
+@keyframes cdtick{from{opacity:.15;transform:translateY(-5px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.cd-n.tick{animation:none}}
+
+/* active spine glyph gets a slow orbiting dashed ring */
+@media (prefers-reduced-motion:no-preference){
+  .spine .ph.active .ring-o{stroke-dasharray:3 5;transform-box:fill-box;
+    transform-origin:center;animation:ringspin 9s linear infinite}
+}
+@keyframes ringspin{to{transform:rotate(360deg)}}
+
+/* sponsor cells ripple in after the grid reveals */
+.spon-grid.reveal .spon-cell{opacity:0;transform:translateY(14px);
+  transition:opacity .7s var(--ease),transform .7s var(--ease),background .4s var(--ease)}
+.spon-grid.reveal.in .spon-cell{opacity:1;transform:none}
+.spon-grid.reveal.in .spon-cell:nth-child(2){transition-delay:.05s}
+.spon-grid.reveal.in .spon-cell:nth-child(3){transition-delay:.1s}
+.spon-grid.reveal.in .spon-cell:nth-child(4){transition-delay:.15s}
+.spon-grid.reveal.in .spon-cell:nth-child(5){transition-delay:.2s}
+.spon-grid.reveal.in .spon-cell:nth-child(6){transition-delay:.25s}
+.spon-grid.reveal.in .spon-cell:nth-child(7){transition-delay:.3s}
+.spon-grid.reveal.in .spon-cell:nth-child(8){transition-delay:.35s}
+.spon-grid.reveal.in .spon-cell:nth-child(9){transition-delay:.4s}
+.spon-grid.reveal.in .spon-cell:nth-child(10){transition-delay:.45s}
+.spon-grid.reveal.in .spon-cell:nth-child(11){transition-delay:.5s}
+.spon-grid.reveal.in .spon-cell:nth-child(12){transition-delay:.55s}
+.spon-grid.reveal.in .spon-cell:nth-child(13){transition-delay:.6s}
+.force-in .spon-cell{opacity:1!important;transform:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){
+  .spon-grid.reveal .spon-cell{opacity:1;transform:none;transition:background .4s}
+}
+
+/* living sheen on the teaser's leading bar */
+.mini-row .fill{position:relative;overflow:hidden}
+@media (prefers-reduced-motion:no-preference){
+  .mini-row.lead .fill::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(100deg,transparent 35%,rgba(255,255,255,.4) 50%,transparent 65%);
+    background-size:250% 100%;animation:sheen 3.2s var(--ease) infinite}
+}
+@keyframes sheen{from{background-position:140% 0}to{background-position:-40% 0}}

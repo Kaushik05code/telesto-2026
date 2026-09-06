@@ -146,6 +146,14 @@
       const d = $('[data-delta]', el);
       d.className = 'delta ' + (i < prev ? 'up' : i > prev ? 'down' : 'same');
       d.textContent = i < prev ? '▲' : i > prev ? '▼' : '•';
+      // overtake drama — gold flash on the riser, brief dim on the faller
+      if (!first && !reduced && i !== prev) {
+        const cls = i < prev ? 'moved-up' : 'moved-down';
+        el.classList.remove('moved-up', 'moved-down');
+        void el.offsetWidth;
+        el.classList.add(cls);
+        setTimeout(() => el.classList.remove(cls), 1100);
+      }
       // leader styling
       el.classList.toggle('lead', i === 0);
       // fill width
@@ -173,6 +181,10 @@
       if (leaderId !== null) {
         $('#live').textContent = `${order[0].name} takes the lead with ${order[0].score} points.`;
         logTx(`<b>${esc(order[0].name)}</b> takes the event horizon`, null);
+        if (!reduced) {                      // champion-change pop on the podium
+          const p1 = $('.pod.p1');
+          if (p1) { p1.classList.add('crowned'); setTimeout(() => p1.classList.remove('crowned'), 1000); }
+        }
       }
       leaderId = order[0].id;
     }

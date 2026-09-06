@@ -1,5 +1,16 @@
 # Changelog — Telesto 2026 Website
 
+## v6 — 6 Sep 2026 · Motion layer ("gravity" feel)
+
+One motion thesis — everything is pulled, swept, or orbits; nothing bounces:
+
+- **Ambient**: rare gold shooting stars in the starfield; hero eclipse gains pointer parallax + scroll drift/fade (depth); orbit rings fade in staggered on load.
+- **Scroll**: timeline rows cascade one-by-one; sponsor logos ripple in; gold gradient headings get a one-time corona sweep when revealed.
+- **Micro**: corona shine sweeps buttons on hover; event cards tilt subtly toward fine pointers; the active spine glyph carries a slow orbiting dashed ring; countdown seconds tick with a micro-fade.
+- **Gravity Board**: the leader's bar has a living sheen; overtaking rows flash gold while fallers briefly dim; a champion change pops the podium; a slow orbital ring turns behind the top three.
+
+Every effect is disabled under `prefers-reduced-motion` and works within the strict CSP (no inline styles).
+
 ## v5 — 6 Sep 2026 · Tighter copy + every-screen polish
 
 - Copy cut roughly in half site-wide: hero (dropped quote + slimmer meta), about condensed to one paragraph, event cards, schedule notes, register steps, ground rules, rankings sub/console hints.

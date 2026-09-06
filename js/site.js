@@ -74,6 +74,44 @@
     if (mark) mark.insertAdjacentHTML('afterbegin', Cosmos.phaseSVG(p, 1));
   });
 
+  /* ---------- Hero depth: pointer + scroll parallax ---------- */
+  const eclipse = $('.hero-eclipse');
+  if (eclipse && !Cosmos.reduced) {
+    const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+    if (fine) addEventListener('pointermove', e => {
+      eclipse.style.setProperty('--px', ((e.clientX / innerWidth - 0.5) * -18).toFixed(1) + 'px');
+      eclipse.style.setProperty('--py', ((e.clientY / innerHeight - 0.5) * -12).toFixed(1) + 'px');
+    }, { passive: true });
+    let ticking = false;
+    addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const k = Math.min(1, scrollY / innerHeight);
+        eclipse.style.setProperty('--sy', (k * 90).toFixed(1) + 'px');
+        eclipse.style.opacity = (1 - k * 0.85).toFixed(3);
+        ticking = false;
+      });
+    }, { passive: true });
+  }
+
+  /* ---------- Event-card tilt (fine pointers only) ---------- */
+  if (!Cosmos.reduced && matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    $$('.ev').forEach(card => {
+      card.addEventListener('pointerenter', () => card.classList.add('tilting'));
+      card.addEventListener('pointermove', e => {
+        const r = card.getBoundingClientRect();
+        const rx = ((e.clientY - r.top) / r.height - 0.5) * -5;
+        const ry = ((e.clientX - r.left) / r.width - 0.5) * 5;
+        card.style.transform = `perspective(700px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(-6px)`;
+      });
+      card.addEventListener('pointerleave', () => {
+        card.classList.remove('tilting');
+        card.style.transform = '';
+      });
+    });
+  }
+
   /* ---------- Countdown to first contact ---------- */
   (function countdown() {
     const box = $('#countdown');
@@ -100,6 +138,11 @@
       cells.h.textContent = String(h).padStart(2, '0');
       cells.m.textContent = String(m).padStart(2, '0');
       cells.s.textContent = String(s).padStart(2, '0');
+      if (!Cosmos.reduced) {               // micro-fade on each second
+        cells.s.classList.remove('tick');
+        void cells.s.offsetWidth;
+        cells.s.classList.add('tick');
+      }
       setTimeout(tick, 1000);
     }
     tick();

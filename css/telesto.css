@@ -106,9 +106,13 @@ p{margin:0}
 .cere{font-family:var(--f-cere)}
 .mono{font-family:var(--f-mono);letter-spacing:.02em}
 .gold-text{
-  background:var(--corona);
+  background:var(--corona);background-size:220% auto;
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
+@media (prefers-reduced-motion:no-preference){
+  .reveal.in .gold-text{animation:goldsweep 1.6s var(--ease) .25s both}
+}
+@keyframes goldsweep{from{background-position:130% 0}to{background-position:0% 0}}
 .lav{color:var(--lavender)}
 .dim{color:var(--ink-dim)}
 
@@ -137,6 +141,14 @@ p{margin:0}
   box-shadow:var(--gold-glow);
 }
 .btn-gold:hover{transform:translateY(-2px);box-shadow:0 0 46px rgba(230,187,126,.6)}
+/* corona shine sweep */
+.btn{overflow:hidden}
+@media (prefers-reduced-motion:no-preference){
+  .btn::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.32) 50%,transparent 70%);
+    transform:translateX(-130%);transition:transform .7s var(--ease)}
+  .btn:hover::before{transform:translateX(130%)}
+}
 .btn-ghost{
   background:transparent;color:var(--ink);
   border-color:var(--hairline-2);
