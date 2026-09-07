@@ -1,5 +1,13 @@
 # Changelog — Telesto 2026 Website
 
+## v7 — 7 Sep 2026 · Google Sheet–driven scoreboard
+
+- **Gravity Board now reads the official Google Sheet** (BMT tab, all 31 teams). Redesigned the tab: branded formatting, frozen panes, a **SHOW ROUND ON WEBSITE** checkbox row (only ticked rounds count), live-round indicator, and totals that mirror the same rule.
+- **Sync pipeline**: `scripts/sync-scores.mjs` (service account, read-only, zero deps) runs via GitHub Actions every 5 minutes + on demand; commits `data/scores.json` only when standings change. Key stored as encrypted repo secret.
+- **Judge Console removed entirely** (with localStorage/BroadcastChannel/sim) — the sheet is the single source of truth. Transmission log, board footer, ground-rules strip, projector chip, team tags, "Champion" label, and the rankings sub-line removed per review. Status chips are now just **Live** + **Updated · Round N**.
+- Event Horizon badge moved inline next to the leader's name (fixes overlap). Event cards top-aligned. Timeline day rows no longer show times. Hero eyebrow removed.
+- Security: no credentials touch the repo or browser; site remains fully static behind GitHub's CDN (DDoS-absorbing); sheet strings escaped before render.
+
 ## v6 — 6 Sep 2026 · Motion layer ("gravity" feel)
 
 One motion thesis — everything is pulled, swept, or orbits; nothing bounces:

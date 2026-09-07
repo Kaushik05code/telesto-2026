@@ -1,0 +1,41 @@
+name: Sync BMT scores from Google Sheet
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"      # every 5 minutes (GitHub's minimum)
+  workflow_dispatch: {}         # manual "sync now" button in the Actions tab
+
+concurrency:
+  group: sync-scores
+  cancel-in-progress: false
+
+permissions:
+  contents: write               # only what the commit needs — nothing else
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Pull scores from the BMT sheet
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: node scripts/sync-scores.mjs
+
+      - name: Commit if standings changed
+        run: |
+          if git diff --quiet data/scores.json; then
+            echo "standings unchanged"
+            exit 0
+          fi
+          git config user.name "telesto-scorebot"
+          git config user.email "actions@github.com"
+          git add data/scores.json
+          git commit -m "scores: sync from BMT sheet"
+          git push

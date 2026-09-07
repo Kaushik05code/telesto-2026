@@ -1,16 +1,161 @@
 {
-  "round": "Business Quiz · Finals",
-  "updated": "2026-09-10T14:22:00+05:30",
-  "teams": [
-    { "id": "nova",    "name": "Nova Syndicate",   "tag": "T-01 · MBA Fin",  "score": 482 },
-    { "id": "quasar",  "name": "Quasar Capital",   "tag": "T-02 · MBA Mktg", "score": 441 },
-    { "id": "horizon", "name": "Event Horizon",    "tag": "T-03 · BBA",      "score": 418 },
-    { "id": "redshift","name": "Redshift Partners","tag": "T-04 · MBA Ops",  "score": 370 },
-    { "id": "orion",   "name": "Orion Ventures",   "tag": "T-05 · MBA Fin",  "score": 344 },
-    { "id": "perihel", "name": "Perihelion",       "tag": "T-06 · BBA",      "score": 305 },
-    { "id": "lagrange","name": "Lagrange Point",   "tag": "T-07 · MBA HR",   "score": 288 },
-    { "id": "zenith",  "name": "Zenith Collective","tag": "T-08 · MBA Mktg", "score": 261 },
-    { "id": "pulsar",  "name": "Pulsar Group",     "tag": "T-09 · BBA",      "score": 224 },
-    { "id": "vela",    "name": "Vela Analytics",   "tag": "T-10 · MBA Ops",  "score": 197 }
-  ]
+ "roundNum": 0,
+ "teams": [
+  {
+   "id": "t1",
+   "name": "Team 1",
+   "score": 0
+  },
+  {
+   "id": "t2",
+   "name": "Team 2",
+   "score": 0
+  },
+  {
+   "id": "t3",
+   "name": "Team 3",
+   "score": 0
+  },
+  {
+   "id": "t4",
+   "name": "Team 4",
+   "score": 0
+  },
+  {
+   "id": "t5",
+   "name": "Team 5",
+   "score": 0
+  },
+  {
+   "id": "t6",
+   "name": "Team 6",
+   "score": 0
+  },
+  {
+   "id": "t7",
+   "name": "Team 7",
+   "score": 0
+  },
+  {
+   "id": "t8",
+   "name": "Team 8",
+   "score": 0
+  },
+  {
+   "id": "t9",
+   "name": "Team 9",
+   "score": 0
+  },
+  {
+   "id": "t10",
+   "name": "Team 10",
+   "score": 0
+  },
+  {
+   "id": "t11",
+   "name": "Team 11",
+   "score": 0
+  },
+  {
+   "id": "t12",
+   "name": "Team 12",
+   "score": 0
+  },
+  {
+   "id": "t13",
+   "name": "Team 13",
+   "score": 0
+  },
+  {
+   "id": "t14",
+   "name": "Team 14",
+   "score": 0
+  },
+  {
+   "id": "t15",
+   "name": "Team 15",
+   "score": 0
+  },
+  {
+   "id": "t16",
+   "name": "Team 16",
+   "score": 0
+  },
+  {
+   "id": "t17",
+   "name": "Team 17",
+   "score": 0
+  },
+  {
+   "id": "t18",
+   "name": "Team 18",
+   "score": 0
+  },
+  {
+   "id": "t19",
+   "name": "Team 19",
+   "score": 0
+  },
+  {
+   "id": "t20",
+   "name": "Team 20",
+   "score": 0
+  },
+  {
+   "id": "t21",
+   "name": "Team 21",
+   "score": 0
+  },
+  {
+   "id": "t22",
+   "name": "Team 22",
+   "score": 0
+  },
+  {
+   "id": "t23",
+   "name": "Team 23",
+   "score": 0
+  },
+  {
+   "id": "t24",
+   "name": "Team 24",
+   "score": 0
+  },
+  {
+   "id": "t25",
+   "name": "Team 25",
+   "score": 0
+  },
+  {
+   "id": "t26",
+   "name": "Team 26",
+   "score": 0
+  },
+  {
+   "id": "t27",
+   "name": "Team 27",
+   "score": 0
+  },
+  {
+   "id": "t28",
+   "name": "Team 28",
+   "score": 0
+  },
+  {
+   "id": "t29",
+   "name": "Team 29",
+   "score": 0
+  },
+  {
+   "id": "t30",
+   "name": "Team 30",
+   "score": 0
+  },
+  {
+   "id": "t31",
+   "name": "Team 31",
+   "score": 0
+  }
+ ],
+ "updated": "2026-09-07T16:01:28.412Z"
 }

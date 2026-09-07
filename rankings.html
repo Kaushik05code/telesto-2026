@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Gravity Board — TELESTO 2026 Live Rankings</title>
-<meta name="description" content="Live standings for TELESTO 2026 · The Noctis Singularity. Ten finalist teams, updating in real time.">
+<meta name="description" content="Live Best Management Team standings for TELESTO 2026 · The Noctis Singularity.">
 <meta name="theme-color" content="#0B0710">
 <meta name="color-scheme" content="dark">
 <meta property="og:type" content="website">
 <meta property="og:title" content="The Gravity Board — TELESTO 2026 Live Rankings">
-<meta property="og:description" content="Ten finalist teams, one event horizon. Live standings from The Noctis Singularity.">
+<meta property="og:description" content="Live Best Management Team standings from The Noctis Singularity.">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="preload" as="font" href="fonts/Michroma-400-latin.woff2" type="font/woff2" crossorigin>
@@ -46,12 +46,9 @@
   <section class="board-hero board-wrap">
     <span class="eyebrow center">Live Standings · The Noctis Singularity</span>
     <h1>The Gravity <span class="g">Board</span></h1>
-    <p class="sub">Ten teams, one event horizon — scores land in real time.</p>
     <div class="status" id="status">
       <span class="chip live"><span class="livedot"></span> Live</span>
-      <span class="chip round" id="roundChip">Round —</span>
-      <span class="chip">Updated <b id="updatedAt">—</b></span>
-      <button class="chip chip-btn" id="projBtn" title="Fullscreen projector view (P)">⛶ Projector</button>
+      <span class="chip round" id="roundChip">Updated · Round —</span>
     </div>
   </section>
 
@@ -67,36 +64,10 @@
 
     <p class="sr-only" role="status" aria-live="polite" id="live"></p>
 
-    <!-- transmission log — recent score events -->
-    <section class="txlog" id="txlog" aria-label="Recent score updates">
-      <h2 class="txlog-title">Transmission Log</h2>
-      <ol class="txlog-list" id="txlist">
-        <li class="tx empty">Awaiting first transmission…</li>
-      </ol>
-    </section>
 
-    <div class="board-foot">
-      <span>Auto-refresh every few seconds · <a href="index.html">Back to Telesto 2026</a></span>
-      <span id="srcNote">Source: scores.json</span>
-    </div>
   </div>
 </main>
 
-<!-- Judge console -->
-<button class="console-btn" id="consoleBtn" aria-expanded="false" aria-controls="console">⊕ Judge Console</button>
-<div class="console-host">
-<aside class="console" id="console" aria-label="Judge scoring console">
-  <button class="close" id="consoleClose" aria-label="Close console">×</button>
-  <h3>Judge Console</h3>
-  <p class="hint">Points update the board live in this browser. Saved locally.</p>
-  <div id="jlist"></div>
-  <div class="sim">
-    <span>Simulate live scoring</span>
-    <button class="toggle" id="simToggle" role="switch" aria-checked="false" aria-label="Simulate live scoring"></button>
-  </div>
-  <button class="reset" id="resetBtn">Reset to scores.json</button>
-</aside>
-</div>
 
 <footer class="footer">
   <div class="footer-grid">

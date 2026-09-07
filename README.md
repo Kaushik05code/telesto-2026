@@ -3,9 +3,9 @@
 CUSBMA's flagship management fest website. Two pages, one visual system.
 
 - **`index.html`** — the landing page (hero eclipse, the singularity, events, schedule, live-rankings teaser, sponsors, register).
-- **`rankings.html`** — **The Gravity Board**, a live-updating leaderboard for the 10 finalist teams.
+- **`rankings.html`** — **The Gravity Board**, the live Best Management Team leaderboard, fed by the official Google Sheet.
 
-Plain HTML / CSS / JS — no build step, no dependencies. Fonts load from Google Fonts (needs internet); everything else is local.
+Plain HTML / CSS / JS — no build step, no dependencies, fonts self-hosted.
 
 ## Run it locally
 
@@ -21,13 +21,11 @@ python3 -m http.server 8000
 
 **https://kaushik05code.github.io/telesto-2026/** — hosted free on GitHub Pages (repo: `Kaushik05code/telesto-2026`), HTTPS enforced, served from GitHub's India edge.
 
-To publish changes: commit and `git push` — Pages redeploys automatically in ~30–60 seconds. That's also how you update live scores for everyone: edit `data/scores.json`, push, and every open browser picks it up within seconds of the deploy.
-
-> For the venue projector, prefer running locally (`python3 -m http.server 8000`) — the Judge Console then updates the projector tab instantly, no push needed.
+To publish site changes: commit and `git push` — Pages redeploys automatically in ~30–60 seconds. Scores flow in on their own (see below).
 
 ### Security posture
 
-Static site, no backend, no secrets. Hardened with: strict Content-Security-Policy on every page (only same-origin scripts/styles/images/fonts; no inline scripts; `object-src 'none'`), self-hosted fonts (zero third-party requests at runtime), referrer policy, all dynamic text HTML-escaped before rendering, HSTS + enforced HTTPS from GitHub Pages. The Judge Console only ever affects the viewer's own browser — the shared source of truth is `scores.json` in the repo.
+Static site, no backend, no secrets. Hardened with: strict Content-Security-Policy on every page (only same-origin scripts/styles/images/fonts; no inline scripts; `object-src 'none'`), self-hosted fonts (zero third-party requests at runtime), referrer policy, all dynamic text HTML-escaped before rendering, HSTS + enforced HTTPS from GitHub Pages. There is no client-side score mutation — the Google Sheet is the single source of truth, read only by GitHub's CI. Being fully static behind GitHub's CDN, the site has no origin server, database, or API to overwhelm — volumetric traffic is absorbed at the edge.
 
 ## Versions — revert anytime
 
@@ -40,26 +38,25 @@ git checkout v1 -- .    # restore everything to version 1
 
 There's also a plain zip of v1 at `versions/telesto-v1.zip` if you'd rather not touch git. Full history of changes: `CHANGELOG.md`.
 
-## The live rankings — three ways to drive it
+## The live rankings — driven by the Google Sheet
 
-Open **`rankings.html`**. The board re-ranks teams by score, animates the bars, and slides rows past each other when a team overtakes another. There are three ways to make scores change live:
+The Gravity Board shows the **Best Management Team** standings for all ~31 teams, straight from the official Google Sheet (BMT tab).
 
-1. **Edit `data/scores.json`** — the board re-fetches it every few seconds. During the event, keep the file open, change a team's `score`, save — the board updates on its own. This is the simplest "single source of truth."
+**How scoring works during the event:**
 
-2. **Judge Console** — click **⊕ Judge Console** (bottom-right) or open `rankings.html#console`. Award or deduct points per team and the board updates instantly. Changes are saved in the browser and broadcast to every open tab in that browser — so you can run the **projector on one tab and score from another**. Use **Reset to scores.json** to clear local edits.
+1. Open the sheet's **BMT** tab. Enter/edit **team names** in column B and **round scores** under Round 1–15.
+2. Row 2 is the control row — **SHOW ROUND ON WEBSITE**. Tick a round's checkbox when its scores are final. Only ticked rounds count toward the website totals (the sheet's TOTAL column mirrors the same rule, and cell R2 shows what's live).
+3. A GitHub Action (`.github/workflows/sync-scores.yml`) reads the sheet **every 5 minutes** with the `n8n-sheets` service account, rebuilds `data/scores.json`, and pushes — the live site updates itself. Browsers also re-poll every minute, so name edits appear within ~1–6 minutes.
+4. Need it *right now*? Repo → **Actions** tab → *Sync BMT scores from Google Sheet* → **Run workflow**. Sync happens in ~30 seconds.
 
-3. **Simulate** — flip *Simulate live scoring* in the console (or open `rankings.html?demo`) to auto-generate score changes. For rehearsals, demos, and screenshots only.
+The service-account key lives only in an encrypted GitHub Actions secret (`GCP_SA_KEY`) — never in the repo or the browser.
 
-On the day: press **P** (or the ⛶ Projector chip) for a fullscreen, big-type view built for the venue screen, and watch the **Transmission Log** under the board narrate every score event as it lands.
-
-### Going fully live with a backend
-
-To sync scores across different devices/networks (not just tabs in one browser), point the board at a real backend. Edit **`js/rankings.js`** → `fetchJSON()` and return data in the same shape as `scores.json`. A Supabase table + Realtime subscription drops in cleanly here; the render layer doesn't need to change.
+Press **P** on the rankings page (or open `rankings.html?projector`) for the fullscreen venue-screen view.
 
 ## Editing content
 
 - Event copy, schedule, sponsors, links: **`index.html`**.
-- Team names / tags / starting scores: **`data/scores.json`** (and the fallback list at the top of `js/rankings.js`).
+- Team names & scores: **the Google Sheet (BMT tab)** — never edit `data/scores.json` by hand.
 - Colours, type, and shared components: **`css/telesto.css`**. Page-specific styles: `css/landing.css`, `css/rankings.css`.
 
 ## Brand tokens

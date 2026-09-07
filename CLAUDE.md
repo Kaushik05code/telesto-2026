@@ -36,13 +36,14 @@ Use headless Chrome; always eyeball changes before calling them done:
 | Path | Purpose |
 |---|---|
 | `index.html` | Landing page (hero, about, events, schedule, teaser, sponsors, register) |
-| `rankings.html` | The Gravity Board — live leaderboard for 10 finalist teams |
+| `rankings.html` | The Gravity Board — live BMT leaderboard (~31 teams, sheet-fed) |
 | `css/telesto.css` | **Design tokens + shared components** (nav, footer, buttons, reveal) |
 | `css/landing.css`, `css/rankings.css` | Page-specific styles |
 | `js/cosmos.js` | Shared: starfield canvas, `phaseSVG()` eclipse-phase glyphs, reveal-on-scroll |
 | `js/site.js` | Landing: spine scrollspy, countdown, timeline markers, mobile nav |
-| `js/rankings.js` | Live engine: FLIP reorder, polling, Judge Console, projector mode, transmission log |
-| `data/scores.json` | Score source of truth (shape documented below) |
+| `js/rankings.js` | Live engine: FLIP reorder, 60s polling, projector mode (P key) |
+| `scripts/sync-scores.mjs` + `.github/workflows/` | Sheet→site sync pipeline (see data flow below) |
+| `data/scores.json` | Machine-written standings (from the Google Sheet — see data flow) |
 | `assets/` | Brand art, logos, sponsor logos (webp variants for the big hero art) |
 | `docs/source/` | Original handoff docx + brochure PDF (**gitignored** — 60MB, never changes) |
 | `versions/` | Zip snapshots (**gitignored** — git tags are the real history) |
@@ -58,20 +59,19 @@ git checkout v1 -- .        # bring v1 files into the working tree
 
 `versions/telesto-v1.zip` is a belt-and-suspenders copy of v1 outside git. When shipping a new stable state: commit, then `git tag vN`, then `zip -qr versions/telesto-vN.zip index.html rankings.html css js data assets README.md`.
 
-## Live rankings — data contract
+## Live rankings — data flow
 
-`data/scores.json` shape (the fallback copy lives at the top of `js/rankings.js` — **keep both in sync** when teams change):
+`data/scores.json` is machine-written — **never hand-edit it**. Shape:
 
 ```json
-{ "round": "…", "updated": "ISO-8601", "teams": [ { "id", "name", "tag", "score" } ] }
+{ "roundNum": 3, "teams": [ { "id": "t1", "name": "…", "score": 123 } ], "updated": "ISO-8601" }
 ```
 
-Update paths, in priority order:
-1. **Judge Console** edits → `localStorage` (`telesto_board_v1`) + `BroadcastChannel('telesto-board')` across tabs. Once local edits exist, JSON polling stops until *Reset to scores.json*.
-2. **Polling** `data/scores.json` every 4s.
-3. Embedded `DEFAULTS` when fetch fails.
+Pipeline: Google Sheet (BMT tab) → `scripts/sync-scores.mjs` (service-account JWT, read-only scope, zero npm deps) → GitHub Action `.github/workflows/sync-scores.yml` (cron every 5 min + manual dispatch, secret `GCP_SA_KEY`) → commit → Pages redeploy → `js/rankings.js` polls every 60 s and re-renders (FLIP reorder, dynamic roster — rows rebuild when team ids/names change).
 
-To go multi-device, replace `fetchJSON()` in `js/rankings.js` — the render layer never needs to change.
+Sheet layout (BMT tab): row 1 title · row 2 = publish checkboxes C2:Q2 ("SHOW ROUND ON WEBSITE", R2 = live-round indicator) · row 3 headers · rows 4–34 = 31 teams. Website totals count **only checked rounds**; `roundNum` = highest checked round. Team names come from column B (blank → "Team N"). Sheet text is untrusted input — keep `esc()` on every rendered string.
+
+There is no Judge Console, no localStorage state, and no client-side score mutation — the sheet is the single source of truth.
 
 ## Design system (do not drift from this)
 

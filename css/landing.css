@@ -266,14 +266,14 @@
   font-family:var(--f-cere);font-size:.66rem;letter-spacing:.24em;
   text-transform:uppercase;color:var(--gold-light);font-weight:600;
 }
-.ev .glyph{margin:.4rem 0 auto;width:34px;height:34px;color:var(--lavender)}
+.ev .glyph{margin:.5rem 0 1.1rem;width:34px;height:34px;color:var(--lavender)}
 .ev h3{
   font-family:var(--f-display);text-transform:uppercase;color:var(--white);
-  font-size:1.02rem;letter-spacing:.02em;line-height:1.15;margin:1.4rem 0 .7rem;
+  font-size:1.02rem;letter-spacing:.02em;line-height:1.15;margin:0 0 .7rem;
 }
 .ev p{color:var(--ink-dim);font-size:.86rem;line-height:1.6}
 .ev .ev-meta{
-  margin-top:1.2rem;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.12em;
+  margin-top:auto;padding-top:1.2rem;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.12em;
   text-transform:uppercase;color:var(--ink-faint);
   display:flex;gap:.5rem;align-items:center;
 }
