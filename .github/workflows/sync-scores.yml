@@ -15,7 +15,7 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
 
@@ -23,19 +23,25 @@ jobs:
         with:
           node-version: 20
 
-      - name: Pull scores from the BMT sheet
+      # Cron can't run more often than every 5 min, so each run syncs
+      # once a minute for the whole window — net cadence: ~1/minute.
+      - name: Sync loop (every ~55s for the 5-minute window)
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-        run: node scripts/sync-scores.mjs
-
-      - name: Commit if standings changed
         run: |
-          if git diff --quiet data/scores.json; then
-            echo "standings unchanged"
-            exit 0
-          fi
           git config user.name "telesto-scorebot"
           git config user.email "actions@github.com"
-          git add data/scores.json
-          git commit -m "scores: sync from BMT sheet"
-          git push
+          for i in 1 2 3 4 5 6; do
+            echo "--- sync pass $i ---"
+            node scripts/sync-scores.mjs
+            if ! git diff --quiet data/scores.json; then
+              git add data/scores.json
+              git commit -m "scores: sync from BMT sheet"
+              git pull --rebase origin main
+              git push
+              echo "pushed new standings"
+            else
+              echo "standings unchanged"
+            fi
+            [ "$i" -lt 6 ] && sleep 55
+          done
