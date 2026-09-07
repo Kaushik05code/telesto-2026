@@ -5,6 +5,9 @@ on:
     - cron: "*/5 * * * *"      # every 5 minutes (GitHub's minimum)
   workflow_dispatch: {}         # manual "sync now" button in the Actions tab
 
+# One long-running sync at a time; each cron tick keeps exactly one
+# follow-up queued, so when the active run ends the next starts at once.
+# Net effect: continuous ~1/minute sync, immune to cron jitter.
 concurrency:
   group: sync-scores
   cancel-in-progress: false
@@ -15,7 +18,7 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 70
     steps:
       - uses: actions/checkout@v4
 
@@ -23,15 +26,13 @@ jobs:
         with:
           node-version: 20
 
-      # Cron can't run more often than every 5 min, so each run syncs
-      # once a minute for the whole window — net cadence: ~1/minute.
-      - name: Sync loop (every ~55s for the 5-minute window)
+      - name: Sync loop (~55 min, one pass per minute)
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
         run: |
           git config user.name "telesto-scorebot"
           git config user.email "actions@github.com"
-          for i in 1 2 3 4 5 6; do
+          for i in $(seq 1 60); do
             echo "--- sync pass $i ---"
             node scripts/sync-scores.mjs
             if ! git diff --quiet data/scores.json; then
@@ -43,6 +44,6 @@ jobs:
             else
               echo "standings unchanged"
             fi
-            if [ "$i" -lt 6 ]; then sleep 55; fi
+            if [ "$i" -lt 60 ]; then sleep 55; fi
           done
           echo "sync loop complete"
