@@ -192,7 +192,7 @@
       <div class="pod ${cls[i]}">
         <div class="orb">${order.indexOf(t) + 1}</div>
         <div class="pod-name">${esc(t.name)}</div>
-        <div class="pod-score">${t.score}</div>
+        <div class="pod-score">${t.score}<span class="pod-pts">pts</span></div>
       </div>` : `<div class="pod"></div>`).join('');
   }
 

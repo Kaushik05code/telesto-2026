@@ -53,6 +53,8 @@
   display:flex;align-items:center;justify-content:center}
 .pod .pod-score{font-family:var(--f-mono);font-size:1.5rem;color:var(--gold-light);margin-top:.5rem;
   font-variant-numeric:tabular-nums}
+.pod .pod-pts{display:block;font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-faint);margin-top:.3rem}
 .pod .pod-tag{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;
   color:var(--ink-faint);margin-top:.35rem}
 .pod.p1{transform:translateY(-22px);border-color:var(--gold-hairline);
