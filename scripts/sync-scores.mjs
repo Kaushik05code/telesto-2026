@@ -10,7 +10,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const SHEET_ID = '1Rx5J8QOXJ2jcN30fG4OoEQKHFVBZd6vNBnDoTKqHOFw';
-const RANGE = 'BMT!A2:R34';          // checkbox row + header + 31 team rows
+const RANGE = 'BMT!A2:U34';          // checkbox row + header + 31 team rows (18 rounds)
 const OUT = fileURLToPath(new URL('../data/scores.json', import.meta.url));
 
 const key = JSON.parse(process.env.GCP_SA_KEY || readFileSync(process.env.GCP_SA_KEY_FILE, 'utf8'));
@@ -52,7 +52,7 @@ if (!res.ok) throw new Error(`sheets ${res.status}: ${await res.text()}`);
 const rows = (await res.json()).values || [];
 
 /* row 0 = publish checkboxes (cols C..Q → idx 2..16), row 1 = header, rows 2+ = teams */
-const publish = (rows[0] || []).slice(2, 17).map(v => v === true || v === 'TRUE');
+const publish = (rows[0] || []).slice(2, 20).map(v => v === true || v === 'TRUE');
 const liveRounds = publish.map((p, i) => p ? i + 1 : 0).filter(Boolean);
 const roundNum = liveRounds.length ? Math.max(...liveRounds) : 0;
 
@@ -63,7 +63,7 @@ for (let r = 2; r < rows.length; r++) {
   if (!num) continue;
   const name = String(row[1] ?? '').trim() || `Team ${num}`;
   let score = 0;
-  for (let c = 2; c <= 16; c++) {
+  for (let c = 2; c <= 19; c++) {
     if (!publish[c - 2]) continue;
     const v = Number(row[c]);
     if (Number.isFinite(v)) score += v;

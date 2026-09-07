@@ -69,7 +69,7 @@ git checkout v1 -- .        # bring v1 files into the working tree
 
 Pipeline: Google Sheet (BMT tab) → `scripts/sync-scores.mjs` (service-account JWT, read-only scope, zero npm deps) → GitHub Action `.github/workflows/sync-scores.yml` (cron every 5 min + manual dispatch, secret `GCP_SA_KEY`) → commit → Pages redeploy → `js/rankings.js` polls every 60 s and re-renders (FLIP reorder, dynamic roster — rows rebuild when team ids/names change).
 
-Sheet layout (BMT tab): row 1 title · row 2 = publish checkboxes C2:Q2 ("SHOW ROUND ON WEBSITE", R2 = live-round indicator) · row 3 headers · rows 4–34 = 31 teams. Website totals count **only checked rounds**; `roundNum` = highest checked round. Team names come from column B (blank → "Team N"). Sheet text is untrusted input — keep `esc()` on every rendered string.
+Sheet layout (BMT tab): row 1 title · row 2 = publish checkboxes C2:T2 — 18 rounds ("SHOW ROUND ON WEBSITE", U2 = live-round indicator) · row 3 headers · rows 4–34 = 31 teams. Website totals count **only checked rounds**; `roundNum` = highest checked round. Team names come from column B (blank → "Team N"). Sheet text is untrusted input — keep `esc()` on every rendered string.
 
 There is no Judge Console, no localStorage state, and no client-side score mutation — the sheet is the single source of truth.
 
