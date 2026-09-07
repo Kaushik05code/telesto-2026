@@ -135,5 +135,26 @@ window.Cosmos = (function () {
     els.forEach(e => io.observe(e));
   }
 
+  /* ---------- Dev: layout-overflow diagnostic (?diag) ---------- */
+  if (location.search.includes('diag')) {
+    addEventListener('load', () => setTimeout(() => {
+      const vw = document.documentElement.clientWidth;
+      const bad = [];
+      document.querySelectorAll('body *').forEach(el => {
+        if (el.id === 'starfield') return;
+        if (getComputedStyle(el).visibility === 'hidden') return;
+        const r = el.getBoundingClientRect();
+        if (r.width && r.right > vw + 1) {
+          bad.push(`+${Math.round(r.right - vw)} ${el.tagName.toLowerCase()}.${String(el.className.baseVal ?? el.className).split(' ')[0]}`);
+        }
+      });
+      const d = document.createElement('div');
+      d.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#000;color:#0f0;font:12px/1.5 monospace;padding:4px 8px;white-space:pre-wrap';
+      const sw = document.documentElement.scrollWidth, bw = document.body.scrollWidth;
+      d.textContent = `W${vw} SW${sw} BW${bw} ${bad.length ? 'FLAG: ' + bad.slice(0, 6).join(' | ') : 'CLEAN'}`;
+      document.body.appendChild(d);
+    }, 400));
+  }
+
   return { reduced, starfield, phaseSVG, reveals };
 })();

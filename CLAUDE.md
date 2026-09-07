@@ -28,7 +28,7 @@ Use headless Chrome; always eyeball changes before calling them done:
 ```
 
 - `index.html?static` — forces all `.reveal` sections visible and shrinks the hero (IntersectionObserver doesn't fire under virtual time).
-- `rankings.html?demo` — auto-simulates score changes. `#console` deep-links the Judge Console open.
+- `?diag=1` on either page overlays a layout-overflow report (viewport vs scrollWidth + offending elements) — use it to audit every breakpoint after layout changes.
 - Headless Chrome has a **~500px minimum layout viewport** — shoot mobile at width 500, not below, or you'll see phantom cropping.
 
 ## Layout

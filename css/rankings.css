@@ -50,7 +50,8 @@
   border:1px solid var(--hairline-2);}
 .pod .pod-name{font-family:var(--f-display);text-transform:uppercase;font-size:.82rem;
   letter-spacing:.04em;color:var(--white);line-height:1.2;min-height:2.2em;
-  display:flex;align-items:center;justify-content:center}
+  display:flex;align-items:center;justify-content:center;
+  overflow-wrap:anywhere;min-width:0}
 .pod .pod-score{font-family:var(--f-mono);font-size:1.5rem;color:var(--gold-light);margin-top:.5rem;
   font-variant-numeric:tabular-nums}
 .pod .pod-pts{display:block;font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;
@@ -103,7 +104,8 @@
 .cell-main{min-width:0}
 .name-line{display:flex;align-items:baseline;gap:.7rem;margin-bottom:.55rem;flex-wrap:wrap}
 .tname{font-family:var(--f-display);text-transform:uppercase;color:var(--white);
-  font-size:.98rem;letter-spacing:.02em;line-height:1}
+  font-size:.98rem;letter-spacing:.02em;line-height:1.25;
+  overflow-wrap:anywhere;min-width:0}
 .ttag{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
   color:var(--ink-faint)}
 .track{position:relative;height:12px;border-radius:6px;background:rgba(179,141,227,.1);overflow:hidden}

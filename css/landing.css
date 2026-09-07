@@ -288,6 +288,7 @@
 .prizes{border-top:1px solid var(--hairline);
   background:linear-gradient(180deg,rgba(20,13,32,.35),transparent)}
 .prize-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(2rem,5vw,5rem);align-items:center}
+.prize-grid > *{min-width:0}   /* let columns shrink; .fee-scroll handles table overflow */
 .prize-hero .eyebrow{margin-bottom:1.4rem}
 .prize-num{
   font-family:var(--f-display);color:var(--white);line-height:.9;

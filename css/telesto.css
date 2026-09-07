@@ -218,9 +218,12 @@ p{margin:0}
     gap:1.6rem;padding:2rem var(--edge);
     background:rgba(14,9,22,.97);backdrop-filter:blur(20px);
     border-left:1px solid var(--hairline);
-    transform:translateX(100%);transition:transform .4s var(--ease);
+    /* visibility toggle: closed menu can't cause phantom overflow or catch focus */
+    transform:translateX(100%);visibility:hidden;
+    transition:transform .4s var(--ease),visibility 0s .4s;
   }
-  .nav-links.open{transform:translateX(0)}
+  .nav-links.open{transform:translateX(0);visibility:visible;
+    transition:transform .4s var(--ease)}
   .nav-links a{font-size:.95rem}
   .nav-toggle{display:block;z-index:61}
 }
