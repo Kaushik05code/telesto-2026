@@ -43,5 +43,6 @@ jobs:
             else
               echo "standings unchanged"
             fi
-            [ "$i" -lt 6 ] && sleep 55
+            if [ "$i" -lt 6 ]; then sleep 55; fi
           done
+          echo "sync loop complete"
