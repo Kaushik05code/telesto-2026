@@ -1,161 +1,161 @@
 {
- "roundNum": 1,
+ "roundNum": 2,
  "teams": [
   {
    "id": "t1",
    "name": "Team 1",
-   "score": 4
+   "score": 8
   },
   {
    "id": "t2",
    "name": "Team 2",
-   "score": 5
+   "score": 10
   },
   {
    "id": "t3",
    "name": "Team 3",
-   "score": 7
+   "score": 14
   },
   {
    "id": "t4",
    "name": "Team 4",
-   "score": 8
+   "score": 16
   },
   {
    "id": "t5",
    "name": "Team 5",
-   "score": 45
+   "score": 90
   },
   {
    "id": "t6",
    "name": "Team 6",
-   "score": 3
+   "score": 6
   },
   {
    "id": "t7",
    "name": "Team 7",
-   "score": 2
+   "score": 4
   },
   {
    "id": "t8",
    "name": "Team 8",
-   "score": 2
+   "score": 4
   },
   {
    "id": "t9",
    "name": "Team 9",
-   "score": 3
+   "score": 6
   },
   {
    "id": "t10",
    "name": "Team 10",
-   "score": 5
+   "score": 10
   },
   {
    "id": "t11",
    "name": "Team 11",
-   "score": 6
+   "score": 12
   },
   {
    "id": "t12",
    "name": "Team 12",
-   "score": 7
+   "score": 14
   },
   {
    "id": "t13",
    "name": "Team 13",
-   "score": 8
+   "score": 16
   },
   {
    "id": "t14",
    "name": "Team 14",
-   "score": 7
+   "score": 14
   },
   {
    "id": "t15",
    "name": "Team 15",
-   "score": 6
+   "score": 12
   },
   {
    "id": "t16",
    "name": "Team 16",
-   "score": 5
+   "score": 10
   },
   {
    "id": "t17",
    "name": "Team 17",
-   "score": 43
+   "score": 86
   },
   {
    "id": "t18",
    "name": "Team 18",
-   "score": 23
+   "score": 46
   },
   {
    "id": "t19",
    "name": "Team 19",
-   "score": 2
+   "score": 4
   },
   {
    "id": "t20",
    "name": "Team 20",
-   "score": 23
+   "score": 46
   },
   {
    "id": "t21",
    "name": "Team 21",
-   "score": 4
+   "score": 8
   },
   {
    "id": "t22",
    "name": "Team 22",
-   "score": 5
+   "score": 10
   },
   {
    "id": "t23",
    "name": "Team 23",
-   "score": 6
+   "score": 12
   },
   {
    "id": "t24",
    "name": "Team 24",
-   "score": 67
+   "score": 134
   },
   {
    "id": "t25",
    "name": "Team 25",
-   "score": 7
+   "score": 14
   },
   {
    "id": "t26",
    "name": "Team Maximus",
-   "score": 88
+   "score": 176
   },
   {
    "id": "t27",
    "name": "Team 27",
-   "score": 65
+   "score": 130
   },
   {
    "id": "t28",
    "name": "Team 28",
-   "score": 43
+   "score": 86
   },
   {
    "id": "t29",
    "name": "Team 29",
-   "score": 3
+   "score": 6
   },
   {
    "id": "t30",
    "name": "Team 30",
-   "score": 3
+   "score": 6
   },
   {
    "id": "t31",
    "name": "Team 31",
-   "score": 4
+   "score": 8
   }
  ],
- "updated": "2026-09-07T16:25:27.416Z"
+ "updated": "2026-09-07T16:28:04.334Z"
 }
