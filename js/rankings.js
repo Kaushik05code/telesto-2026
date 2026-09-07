@@ -20,6 +20,7 @@
   let leaderId = null;
 
   /* ---------- boot ---------- */
+  try { localStorage.removeItem('telesto_board_v1'); } catch (e) {}   // purge pre-v7 local data
   Cosmos.starfield($('#starfield'));
   const toggle = $('#navToggle'), links = $('#navlinks');
   toggle.addEventListener('click', () => {
