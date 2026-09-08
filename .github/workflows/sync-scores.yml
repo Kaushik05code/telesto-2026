@@ -47,3 +47,17 @@ jobs:
             if [ "$i" -lt 60 ]; then sleep 55; fi
           done
           echo "sync loop complete"
+
+      # GitHub's cron is unreliable (hours late for small repos), so each run
+      # dispatches the next one — continuous coverage, cron only as a backup.
+      # Chain self-terminates after the fest; disable the workflow to stop early.
+      - name: Chain the next run
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then echo "no dispatch token — relying on cron"; exit 0; fi
+          if [ "$(date -u +%Y%m%d)" -gt 20260912 ]; then echo "fest over — chain ends"; exit 0; fi
+          gh workflow run sync-scores.yml --repo "$GITHUB_REPOSITORY" \
+            && echo "next run dispatched" \
+            || echo "dispatch failed — cron will revive"
