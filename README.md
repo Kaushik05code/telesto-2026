@@ -44,8 +44,8 @@ The Gravity Board shows the **Best Management Team** standings for all ~31 teams
 
 **How scoring works during the event:**
 
-1. Open the sheet's **BMT** tab. Enter/edit **team names** in column B and **round scores** under Round 1–15.
-2. Row 2 is the control row — **SHOW ROUND ON WEBSITE**. Tick a round's checkbox when its scores are final. Only ticked rounds count toward the website totals (the sheet's TOTAL column mirrors the same rule, and cell R2 shows what's live).
+1. Open the sheet's **BMT** tab. Enter/edit **team names** in column B and **round scores** under Round 1–18.
+2. Row 2 is the control row — **SHOW ROUND ON WEBSITE**. Tick a round's checkbox when its scores are final. Only ticked rounds count toward the website totals (the sheet's TOTAL column mirrors the same rule, and cell U2 shows what's live).
 3. A GitHub Action (`.github/workflows/sync-scores.yml`) checks the sheet **once a minute, continuously** — each run loops for ~55 minutes and then launches its successor (GitHub's cron is only a backup; it proved hours-late). Changes reach the live site in ~1–2 minutes. The chain stops by itself after 12 Sep 2026; to stop it earlier: repo → Actions → *Sync BMT scores* → ⋯ → **Disable workflow**.
 4. Need it *right now*? Repo → **Actions** tab → *Sync BMT scores from Google Sheet* → **Run workflow**. Sync happens in ~30 seconds.
 
