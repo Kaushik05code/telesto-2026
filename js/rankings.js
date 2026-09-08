@@ -1,26 +1,27 @@
 /* ============================================================
    TELESTO 2026 — The Gravity Board (live engine)
-   Source of truth: data/scores.json, rebuilt every 5 minutes by
-   .github/workflows/sync-scores.yml from the official BMT Google
-   Sheet (publish checkboxes decide which rounds count).
-   The browser only ever polls same-origin JSON — no credentials,
-   no third-party calls, no local editing.
+   Public: rank order + bars relative to the leader. No points.
+   Team login: decrypts that team's per-round ranks in-browser
+   (AES-256-GCM, key derived from the team password) — nothing is
+   ever sent anywhere and no other team's data can be read.
+   Data: data/scores.json, rebuilt each minute from the BMT sheet.
    ============================================================ */
 (function () {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduced = Cosmos.reduced;
-  const POLL_MS = 60000;                 // re-check standings every minute
+  const POLL_MS = 60000;
+  const LS_KEY = 'telesto_login_v1';
 
-  let state = { roundNum: 0, teams: [] };
-  let rosterKey = '';                    // id|name signature — rebuild rows when it changes
-  let rankOf = {};                       // id -> previous rank
-  let prevScores = null;                 // id -> score at last apply
-  let rows = {};                         // id -> <li>
+  let state = { roundNum: 0, teams: [], access: [] };
+  let rosterKey = '';
+  let rankOf = {};
+  let rows = {};
   let leaderId = null;
+  let session = null;                    // {id, name, pass, payload, round}
 
   /* ---------- boot ---------- */
-  try { localStorage.removeItem('telesto_board_v1'); } catch (e) {}   // purge pre-v7 local data
+  try { localStorage.removeItem('telesto_board_v1'); } catch (e) {}
   Cosmos.starfield($('#starfield'));
   const toggle = $('#navToggle'), links = $('#navlinks');
   toggle.addEventListener('click', () => {
@@ -31,13 +32,16 @@
   init();
 
   async function init() {
+    wireLogin();
     const data = await fetchJSON();
-    if (data) apply(normalize(data), true);
-    else showEmpty('Standings are syncing — check back in a moment.');
+    if (data) {
+      apply(normalize(data), true);
+      restoreSession();
+    } else showEmpty('Standings are syncing — check back in a moment.');
     setInterval(async () => {
       if (document.hidden) return;
       const d = await fetchJSON();
-      if (d) apply(normalize(d));
+      if (d) { apply(normalize(d)); refreshSession(); }
     }, POLL_MS);
   }
 
@@ -50,14 +54,20 @@
     } catch (e) { return null; }
   }
   function normalize(d) {
+    let teams = Array.isArray(d.teams) ? d.teams : [];
+    const maxScore = Math.max(1, ...teams.map(t => Number(t.score) || 0));
+    teams = teams.map(t => ({
+      id: String(t.id),
+      name: String(t.name || t.id),
+      pct: t.pct !== undefined ? Number(t.pct) || 0
+        : Math.round(((Number(t.score) || 0) / maxScore) * 100)   // legacy shape
+    }));
     return {
       roundNum: Number(d.roundNum) || 0,
-      teams: Array.isArray(d.teams)
-        ? d.teams.map(t => ({ id: String(t.id), name: String(t.name || t.id), score: Number(t.score) || 0 }))
-        : []
+      teams,
+      access: Array.isArray(d.access) ? d.access : []
     };
   }
-  function ranked() { return [...state.teams].sort((a, b) => b.score - a.score); }
 
   function showEmpty(msg) {
     const board = $('#board');
@@ -68,9 +78,9 @@
     board.appendChild(li);
   }
 
-  /* ---------- rows ---------- */
   function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
 
+  /* ---------- board ---------- */
   function buildRows() {
     const board = $('#board');
     board.innerHTML = '';
@@ -85,31 +95,27 @@
          <div class="cell-main">
            <div class="name-line"><span class="tname">${esc(t.name)}</span></div>
            <div class="track"><div class="fill" data-fill></div></div>
-         </div>
-         <div class="score" data-score>0<span class="pts">pts</span></div>`;
+         </div>`;
       li.setAttribute('aria-label', t.name);
       board.appendChild(li);
       rows[t.id] = li;
     });
   }
 
-  /* ---------- apply an update ---------- */
   function apply(data, first) {
     const key = data.teams.map(t => t.id + '|' + t.name).join('\n');
-    const rebuilt = key !== rosterKey;
-    if (rebuilt) {
+    if (key !== rosterKey) {
       state = data; rosterKey = key;
       buildRows();
-      rankOf = {}; prevScores = null;
-      first = true;                       // fresh rows animate in from zero
+      rankOf = {};
+      first = true;
     } else {
       state = data;
     }
     if (!state.teams.length) { showEmpty('No teams on the board yet.'); return; }
 
-    const order = ranked();
+    const order = state.teams;             // server-sorted, best first
     const board = $('#board');
-    const mx = Math.max(1, ...state.teams.map(t => t.score));
 
     const before = {};
     if (!first && !reduced) order.forEach(t => { before[t.id] = rows[t.id].getBoundingClientRect().top; });
@@ -138,26 +144,21 @@
         el.classList.add(cls);
         setTimeout(() => el.classList.remove(cls), 1100);
       }
-      el.classList.toggle('lead', i === 0 && t.score > 0);
-      const pct = (t.score / mx) * 100;
+      el.classList.toggle('lead', i === 0 && t.pct > 0);
       const fill = $('[data-fill]', el);
-      if (first) { fill.style.width = '0%'; requestAnimationFrame(() => fill.style.width = pct.toFixed(1) + '%'); }
-      else fill.style.width = pct.toFixed(1) + '%';
-      const sc = $('[data-score]', el);
-      countUp(sc, parseInt(sc.dataset.v || '0', 10), t.score, first);
+      if (first) { fill.style.width = '0%'; requestAnimationFrame(() => fill.style.width = t.pct + '%'); }
+      else fill.style.width = t.pct + '%';
     });
 
     rankOf = {};
     order.forEach((t, i) => rankOf[t.id] = i);
-    prevScores = {};
-    state.teams.forEach(t => prevScores[t.id] = t.score);
 
     renderPodium(order);
     $('#roundChip').textContent = 'Updated · Round ' + (state.roundNum || '—');
 
     if (order[0] && order[0].id !== leaderId) {
       if (leaderId !== null) {
-        $('#live').textContent = `${order[0].name} takes the lead with ${order[0].score} points.`;
+        $('#live').textContent = `${order[0].name} takes the lead.`;
         if (!reduced) {
           const p1 = $('.pod.p1');
           if (p1) { p1.classList.add('crowned'); setTimeout(() => p1.classList.remove('crowned'), 1000); }
@@ -165,22 +166,6 @@
       }
       leaderId = order[0].id;
     }
-  }
-
-  function countUp(el, from, to, instant) {
-    el.dataset.v = to;
-    const run = el._cuRun = (el._cuRun || 0) + 1;
-    const write = v => el.firstChild.nodeValue = String(v);
-    if (instant || reduced || from === to) { write(to); return; }
-    el.classList.add('bump'); el.closest('.row').classList.add('bump');
-    const t0 = performance.now(), dur = 700;
-    requestAnimationFrame(function tick(t) {
-      if (el._cuRun !== run) return;
-      const k = Math.min(1, Math.max(0, (t - t0) / dur));
-      write(Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3))));
-      if (k < 1) requestAnimationFrame(tick);
-      else setTimeout(() => { el.classList.remove('bump'); el.closest('.row').classList.remove('bump'); }, 300);
-    });
   }
 
   function renderPodium(order) {
@@ -192,8 +177,120 @@
       <div class="pod ${cls[i]}">
         <div class="orb">${order.indexOf(t) + 1}</div>
         <div class="pod-name">${esc(t.name)}</div>
-        <div class="pod-score">${t.score}<span class="pod-pts">pts</span></div>
       </div>` : `<div class="pod"></div>`).join('');
+  }
+
+  /* ---------- team login (all client-side, nothing transmitted) ---------- */
+  const enc = new TextEncoder(), dec = new TextDecoder();
+  const b64d = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+  async function decryptBlob(blob, pass, id) {
+    const raw = b64d(blob);
+    const base = await crypto.subtle.importKey('raw', enc.encode(pass), 'PBKDF2', false, ['deriveKey']);
+    const dkey = await crypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt: enc.encode('telesto26:' + id), iterations: 150000, hash: 'SHA-256' },
+      base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+    const plain = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv: raw.slice(0, 12) }, dkey, raw.slice(12));
+    return JSON.parse(dec.decode(plain));
+  }
+
+  const norm = s => String(s).toLowerCase().replace(/\s+/g, ' ').trim();
+
+  async function tryLogin(uname, pass) {
+    const wanted = norm(uname);
+    const candidates = state.teams.filter(t => norm(t.name) === wanted);
+    for (const t of candidates) {
+      const a = state.access.find(x => x.id === t.id);
+      if (!a) continue;
+      try {
+        const payload = await decryptBlob(a.blob, pass, t.id);
+        return { id: t.id, name: t.name, pass, payload };
+      } catch (e) { /* wrong password for this candidate */ }
+    }
+    return null;
+  }
+
+  function wireLogin() {
+    const host = $('#loginHost'), panel = $('#loginPanel');
+    const open = v => { panel.classList.toggle('open', v); $('#loginChip').setAttribute('aria-expanded', v); if (v) $('#lgName').focus(); };
+    $('#loginChip').addEventListener('click', () => open(!panel.classList.contains('open')));
+    $('#lgClose').addEventListener('click', () => open(false));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') open(false); });
+    if (location.hash === '#login') open(true);
+
+    $('#lgForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const err = $('#lgErr');
+      err.textContent = '';
+      const btn = $('#lgGo');
+      btn.disabled = true; btn.textContent = 'Checking…';
+      const res = await tryLogin($('#lgName').value, $('#lgPass').value.trim());
+      btn.disabled = false; btn.textContent = 'View my ranks';
+      if (!res) {
+        err.textContent = state.access.length
+          ? 'No match — check your team name and password.'
+          : 'Logins are still being provisioned. Try again in a minute.';
+        return;
+      }
+      session = res;
+      try { localStorage.setItem(LS_KEY, JSON.stringify({ n: res.name, p: res.pass })); } catch (e2) {}
+      renderTeamView();
+    });
+
+    $('#lgLogout').addEventListener('click', () => {
+      session = null;
+      try { localStorage.removeItem(LS_KEY); } catch (e) {}
+      $('#lgResult').hidden = true;
+      $('#lgForm').hidden = false;
+      $('#lgPass').value = '';
+    });
+  }
+
+  async function restoreSession() {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch (e) {}
+    if (!saved) return;
+    const res = await tryLogin(saved.n, saved.p);
+    if (res) { session = res; renderTeamView(); }
+  }
+
+  async function refreshSession() {
+    if (!session) return;
+    const a = state.access.find(x => x.id === session.id);
+    if (!a) return;
+    try {
+      session.payload = await decryptBlob(a.blob, session.pass, session.id);
+      session.name = session.payload.n;
+      renderTeamView();
+    } catch (e) { /* keep last good payload */ }
+  }
+
+  function renderTeamView() {
+    const p = session.payload;
+    $('#lgForm').hidden = true;
+    $('#lgResult').hidden = false;
+    $('#lgWho').textContent = p.n;
+    const roundsEl = $('#lgRounds');
+    if (!p.rounds.length) {
+      roundsEl.innerHTML = '';
+      $('#lgOut').innerHTML = '<p class="lg-wait">No rounds are live yet — ranks appear here as rounds are published.</p>';
+      return;
+    }
+    if (!session.round || !p.rounds.some(r => r.r === session.round)) {
+      session.round = p.rounds[p.rounds.length - 1].r;      // latest by default
+    }
+    roundsEl.innerHTML = p.rounds.map(r =>
+      `<button class="rnd${r.r === session.round ? ' on' : ''}" data-r="${r.r}">R${r.r}</button>`).join('');
+    $$('.rnd', roundsEl).forEach(b => b.addEventListener('click', () => {
+      session.round = parseInt(b.dataset.r, 10);
+      renderTeamView();
+    }));
+    const sel = p.rounds.find(r => r.r === session.round);
+    $('#lgOut').innerHTML =
+      `<div class="lg-rank"><span class="lg-num">#${sel.rr}</span><span class="lg-cap">Round ${sel.r} rank</span></div>
+       <div class="lg-rank sub"><span class="lg-num">#${sel.or}</span><span class="lg-cap">Overall after Round ${sel.r}</span></div>
+       <p class="lg-note">of ${p.total} teams</p>`;
   }
 
   /* ---------- projector view (press P, or ?projector) ---------- */
@@ -204,7 +301,7 @@
       try {
         if (on && !document.fullscreenElement) await document.documentElement.requestFullscreen();
         else if (!on && document.fullscreenElement) await document.exitFullscreen();
-      } catch (e) { /* class-based mode still applies */ }
+      } catch (e) { }
     }
     document.addEventListener('keydown', e => {
       if (e.key.toLowerCase() === 'p' && !e.metaKey && !e.ctrlKey &&

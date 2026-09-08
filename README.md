@@ -51,6 +51,8 @@ The Gravity Board shows the **Best Management Team** standings for all ~31 teams
 
 The service-account key lives only in an encrypted GitHub Actions secret (`GCP_SA_KEY`) — never in the repo or the browser.
 
+**Team Login** (chip on the rankings page): teams sign in with their **team name + password** from the credentials sheet to see their own per-round rank and overall rank — only for rounds you've ticked. Ranks are end-to-end encrypted per team; no team can see another's. Passwords: credentials Google Sheet, column C (auto-generated; usernames stay synced to team renames).
+
 Press **P** on the rankings page (or open `rankings.html?projector`) for the fullscreen venue-screen view.
 
 ## Editing content

@@ -71,7 +71,7 @@ Pipeline: Google Sheet (BMT tab) → `scripts/sync-scores.mjs` (service-account 
 
 Sheet layout (BMT tab): row 1 title · row 2 = publish checkboxes C2:T2 — 18 rounds ("SHOW ROUND ON WEBSITE", U2 = live-round indicator) · row 3 headers · rows 4–34 = 31 teams. Website totals count **only checked rounds**; `roundNum` = highest checked round. Team names come from column B (blank → "Team N"). Sheet text is untrusted input — keep `esc()` on every rendered string.
 
-There is no Judge Console, no localStorage state, and no client-side score mutation — the sheet is the single source of truth.
+There is no Judge Console and no client-side score mutation — the sheet is the single source of truth. **No raw points are ever published**: the public payload carries only rank order + bar `pct`; per-team per-round ranks travel as AES-256-GCM blobs (`access[]`) keyed by PBKDF2(password, salt `telesto26:<id>`, 150k, SHA-256), decrypted in-browser at Team Login (username = team name; passwords live in the separate credentials sheet `1OLi7MZ4…`, whose Username column the sync auto-refreshes on renames).
 
 ## Design system (do not drift from this)
 
