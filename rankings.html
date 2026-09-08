@@ -13,9 +13,9 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="preload" as="font" href="fonts/Michroma-400-latin.woff2" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/fonts.css?v=15">
-<link rel="stylesheet" href="css/telesto.css?v=15">
-<link rel="stylesheet" href="css/rankings.css?v=15">
+<link rel="stylesheet" href="css/fonts.css?v=16">
+<link rel="stylesheet" href="css/telesto.css?v=16">
+<link rel="stylesheet" href="css/rankings.css?v=16">
 <link rel="icon" href="assets/logo-telesto.png">
 </head>
 <body>
@@ -78,7 +78,13 @@
     <label class="lg-label" for="lgName">Team name</label>
     <input class="lg-input" id="lgName" type="text" autocomplete="username" required>
     <label class="lg-label" for="lgPass">Password</label>
-    <input class="lg-input" id="lgPass" type="password" autocomplete="current-password" required>
+    <div class="lg-passwrap">
+      <input class="lg-input" id="lgPass" type="password" autocomplete="current-password" required>
+      <button class="lg-eye" id="lgEye" type="button" aria-label="Show password" aria-pressed="false">
+        <svg class="eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>
+        <svg class="eye-shut" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/><path d="M4 20 20 4"/></svg>
+      </button>
+    </div>
     <button class="btn btn-gold lg-go" id="lgGo" type="submit">View my ranks</button>
     <p class="lg-err" id="lgErr" role="alert"></p>
   </form>
@@ -121,7 +127,7 @@
   </div>
 </footer>
 
-<script src="js/cosmos.js?v=15"></script>
-<script src="js/rankings.js?v=15"></script>
+<script src="js/cosmos.js?v=16"></script>
+<script src="js/rankings.js?v=16"></script>
 </body>
 </html>

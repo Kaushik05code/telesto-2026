@@ -216,6 +216,15 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') open(false); });
     if (location.hash === '#login') open(true);
 
+    const eye = $('#lgEye'), pass = $('#lgPass');
+    eye.addEventListener('click', () => {
+      const show = pass.type === 'password';
+      pass.type = show ? 'text' : 'password';
+      eye.setAttribute('aria-pressed', show);
+      eye.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+      pass.focus();
+    });
+
     $('#lgForm').addEventListener('submit', async e => {
       e.preventDefault();
       const err = $('#lgErr');

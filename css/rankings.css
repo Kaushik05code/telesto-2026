@@ -268,6 +268,17 @@ body.projector .rank{font-size:1.6rem}
   color:var(--ink);font-family:var(--f-body);font-size:1.1rem;
 }
 .lg-input:focus-visible{outline:2px solid var(--gold-light);outline-offset:2px;border-color:transparent}
+.lg-passwrap{position:relative}
+.lg-passwrap .lg-input{padding-right:3.1em}
+.lg-eye{
+  position:absolute;top:50%;right:.65em;transform:translateY(-50%);
+  background:none;border:0;cursor:pointer;color:var(--ink-dim);
+  padding:.35em;line-height:0;border-radius:3px;transition:color .2s;
+}
+.lg-eye:hover{color:var(--gold-light)}
+.lg-eye .eye-shut{display:none}
+.lg-eye[aria-pressed="true"] .eye-open{display:none}
+.lg-eye[aria-pressed="true"] .eye-shut{display:block}
 .lg-go{margin-top:1.3rem;width:100%;justify-content:center}
 .lg-err{color:#e08f8f;font-size:.82rem;margin-top:.8rem;min-height:1.2em}
 .lg-hint{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.06em;
