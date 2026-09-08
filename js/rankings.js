@@ -285,7 +285,6 @@
     const sel = p.rounds.find(r => r.r === session.round);
     $('#lgOut').innerHTML =
       `<div class="lg-rank"><span class="lg-num">#${sel.rr}</span><span class="lg-cap">Round ${sel.r} rank</span></div>
-       <div class="lg-rank sub"><span class="lg-num">#${sel.or}</span><span class="lg-cap">Overall after Round ${sel.r}</span></div>
        <p class="lg-note">of ${p.total} teams</p>`;
   }
 
