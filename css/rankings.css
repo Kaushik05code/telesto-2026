@@ -247,25 +247,25 @@ body.projector .rank{font-size:1.6rem}
 }
 .login-host{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:80}
 .login-panel{
-  position:absolute;top:0;right:0;bottom:0;width:min(92vw,360px);
+  position:absolute;top:0;right:0;bottom:0;width:min(94vw,460px);
   background:rgba(12,8,20,.97);backdrop-filter:blur(18px);
   border-left:1px solid var(--hairline-2);pointer-events:auto;
   transform:translateX(100%);visibility:hidden;
   transition:transform .45s var(--ease),visibility 0s .45s;
-  display:flex;flex-direction:column;padding:1.8rem 1.6rem;overflow-y:auto;
+  display:flex;flex-direction:column;padding:2.4rem 2.2rem;overflow-y:auto;
 }
 .login-panel.open{transform:none;visibility:visible;
   transition:transform .45s var(--ease)}
 .lg-close{position:absolute;top:.9rem;right:1rem;background:none;border:0;
   color:var(--ink-dim);cursor:pointer;font-size:1.5rem;line-height:1}
 .lg-title{font-family:var(--f-display);text-transform:uppercase;color:var(--white);
-  font-size:1.05rem;letter-spacing:.06em;margin-bottom:1.4rem}
-.lg-label{display:block;font-family:var(--f-mono);font-size:.62rem;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--ink-faint);margin:.9rem 0 .35rem}
+  font-size:1.4rem;letter-spacing:.06em;margin-bottom:1.8rem}
+.lg-label{display:block;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ink-faint);margin:1.1rem 0 .45rem}
 .lg-input{
-  width:100%;padding:.75em .9em;border-radius:3px;
+  width:100%;padding:.95em 1em;border-radius:3px;
   background:rgba(179,141,227,.07);border:1px solid var(--hairline-2);
-  color:var(--ink);font-family:var(--f-body);font-size:1rem;
+  color:var(--ink);font-family:var(--f-body);font-size:1.1rem;
 }
 .lg-input:focus-visible{outline:2px solid var(--gold-light);outline-offset:2px;border-color:transparent}
 .lg-go{margin-top:1.3rem;width:100%;justify-content:center}
@@ -275,10 +275,10 @@ body.projector .rank{font-size:1.6rem}
 .lg-whocap{font-family:var(--f-cere);font-size:.6rem;letter-spacing:.28em;
   text-transform:uppercase;color:var(--gold-light)}
 .lg-who{font-family:var(--f-display);text-transform:uppercase;color:var(--white);
-  font-size:1.1rem;margin:.3rem 0 1.3rem;overflow-wrap:anywhere}
+  font-size:1.35rem;margin:.35rem 0 1.5rem;overflow-wrap:anywhere}
 .lg-rounds{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:1.4rem}
 .rnd{
-  font-family:var(--f-mono);font-size:.78rem;color:var(--lavender);
+  font-family:var(--f-mono);font-size:.92rem;color:var(--lavender);
   background:rgba(179,141,227,.08);border:1px solid var(--hairline-2);
   border-radius:3px;padding:.45em .7em;cursor:pointer;
   transition:color .2s,border-color .2s,background .2s;
@@ -287,10 +287,10 @@ body.projector .rank{font-size:1.6rem}
 .rnd.on{color:#1c1204;background:var(--corona);border-color:transparent;font-weight:700}
 .lg-rank{display:flex;align-items:baseline;gap:.8rem;padding:.7rem 0;
   border-bottom:1px dashed var(--hairline)}
-.lg-rank.sub .lg-num{font-size:1.6rem;color:var(--lavender)}
-.lg-num{font-family:var(--f-mono);font-size:2.4rem;color:var(--gold-light);
+.lg-rank.sub .lg-num{font-size:2rem;color:var(--lavender)}
+.lg-num{font-family:var(--f-mono);font-size:3rem;color:var(--gold-light);
   font-variant-numeric:tabular-nums;line-height:1}
-.lg-cap{font-size:.82rem;color:var(--ink-dim)}
+.lg-cap{font-size:.95rem;color:var(--ink-dim)}
 .lg-note{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.14em;
   text-transform:uppercase;color:var(--ink-faint);margin-top:.8rem}
 .lg-wait{color:var(--ink-dim);font-size:.9rem;line-height:1.7}

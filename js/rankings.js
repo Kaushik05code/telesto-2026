@@ -11,7 +11,6 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduced = Cosmos.reduced;
   const POLL_MS = 60000;
-  const LS_KEY = 'telesto_login_v1';
 
   let state = { roundNum: 0, teams: [], access: [] };
   let rosterKey = '';
@@ -21,7 +20,7 @@
   let session = null;                    // {id, name, pass, payload, round}
 
   /* ---------- boot ---------- */
-  try { localStorage.removeItem('telesto_board_v1'); } catch (e) {}
+  try { localStorage.removeItem('telesto_board_v1'); localStorage.removeItem('telesto_login_v1'); } catch (e) {}
   Cosmos.starfield($('#starfield'));
   const toggle = $('#navToggle'), links = $('#navlinks');
   toggle.addEventListener('click', () => {
@@ -34,10 +33,8 @@
   async function init() {
     wireLogin();
     const data = await fetchJSON();
-    if (data) {
-      apply(normalize(data), true);
-      restoreSession();
-    } else showEmpty('Standings are syncing — check back in a moment.');
+    if (data) apply(normalize(data), true);
+    else showEmpty('Standings are syncing — check back in a moment.');
     setInterval(async () => {
       if (document.hidden) return;
       const d = await fetchJSON();
@@ -234,25 +231,15 @@
         return;
       }
       session = res;
-      try { localStorage.setItem(LS_KEY, JSON.stringify({ n: res.name, p: res.pass })); } catch (e2) {}
       renderTeamView();
     });
 
     $('#lgLogout').addEventListener('click', () => {
       session = null;
-      try { localStorage.removeItem(LS_KEY); } catch (e) {}
       $('#lgResult').hidden = true;
       $('#lgForm').hidden = false;
       $('#lgPass').value = '';
     });
-  }
-
-  async function restoreSession() {
-    let saved = null;
-    try { saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch (e) {}
-    if (!saved) return;
-    const res = await tryLogin(saved.n, saved.p);
-    if (res) { session = res; renderTeamView(); }
   }
 
   async function refreshSession() {
