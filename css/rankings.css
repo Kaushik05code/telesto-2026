@@ -230,6 +230,21 @@ body.projector .rank{font-size:1.6rem}
 /* ---------- Team login ---------- */
 .chip-btn{cursor:pointer;transition:color .25s,border-color .25s}
 .chip-btn:hover{color:var(--gold-light);border-color:var(--gold-hairline)}
+/* Team Login — impossible to miss */
+#loginChip{
+  color:#1c1204;background:var(--corona);border-color:transparent;
+  font-weight:700;box-shadow:0 0 26px rgba(230,187,126,.5);
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease);
+}
+#loginChip:hover{color:#1c1204;transform:translateY(-2px);
+  box-shadow:0 0 40px rgba(230,187,126,.75)}
+@media (prefers-reduced-motion:no-preference){
+  #loginChip{animation:loginglow 2.6s var(--ease) infinite}
+}
+@keyframes loginglow{
+  0%,100%{box-shadow:0 0 18px rgba(230,187,126,.4)}
+  50%{box-shadow:0 0 34px rgba(230,187,126,.75)}
+}
 .login-host{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:80}
 .login-panel{
   position:absolute;top:0;right:0;bottom:0;width:min(92vw,360px);
