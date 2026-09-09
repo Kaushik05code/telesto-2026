@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 const BMT_ID = '1Rx5J8QOXJ2jcN30fG4OoEQKHFVBZd6vNBnDoTKqHOFw';
 const CREDS_ID = '1OLi7MZ4lEAcZfnKeSgs2IW0115S3N6VXYMKRKowiaBs';
-const ROUNDS = 18;                       // BMT columns C..T
+const ROUNDS = 19;                       // BMT columns C..U = Round 0..Round 18
 const OUT = fileURLToPath(new URL('../data/scores.json', import.meta.url));
 
 const key = JSON.parse(process.env.GCP_SA_KEY || readFileSync(process.env.GCP_SA_KEY_FILE, 'utf8'));
@@ -54,10 +54,11 @@ async function sheet(id, range, opts = '') {
 }
 
 /* ---------- BMT tab ---------- */
-const rows = await sheet(BMT_ID, 'BMT!A2:U34');
+const rows = await sheet(BMT_ID, 'BMT!A2:V34');
 const publish = (rows[0] || []).slice(2, 2 + ROUNDS).map(v => v === true || v === 'TRUE');
-const liveRounds = publish.map((p, i) => p ? i + 1 : 0).filter(Boolean);
-const roundNum = liveRounds.length ? Math.max(...liveRounds) : 0;
+/* rounds are 0-based: column C = Round 0 */
+const liveRounds = publish.map((p, i) => p ? i : -1).filter(i => i >= 0);
+const roundNum = liveRounds.length ? Math.max(...liveRounds) : null;
 
 const teams = [];                        // {num, id, name, perRound[18], total}
 for (let r = 2; r < rows.length; r++) {
@@ -73,7 +74,7 @@ for (let r = 2; r < rows.length; r++) {
     perRound.push(score);
     if (publish[c]) total += score;
   }
-  teams.push({ num, id: 't' + num, name, perRound, total: Math.round(total) });
+  teams.push({ num, id: 't' + num, name, perRound, total: Math.round(total * 100) / 100 });
 }
 
 /* competition ranking (1,2,2,4) of `value` within `values` (desc) */
@@ -115,13 +116,13 @@ const pub = ordered.map(t => ({
 
 /* ---------- private per-team blobs ---------- */
 function teamPayload(t) {
-  const rounds = liveRounds.map(r => {
-    const roundScores = teams.map(x => x.perRound[r - 1]);
-    const cumTo = x => liveRounds.filter(lr => lr <= r).reduce((s, lr) => s + x.perRound[lr - 1], 0);
+  const rounds = liveRounds.map(r => {                 // r is 0-based (Round 0 = perRound[0])
+    const roundScores = teams.map(x => x.perRound[r]);
+    const cumTo = x => liveRounds.filter(lr => lr <= r).reduce((s, lr) => s + x.perRound[lr], 0);
     const cums = teams.map(cumTo);
     return {
       r,
-      rr: rankOf(t.perRound[r - 1], roundScores),
+      rr: rankOf(t.perRound[r], roundScores),
       or: rankOf(cumTo(t), cums)
     };
   });
@@ -129,7 +130,7 @@ function teamPayload(t) {
 }
 
 const plainSig = createHash('sha256').update(JSON.stringify({
-  data: teams.map(t => [t.id, passByNum[t.num] || '', ...liveRounds.map(r => t.perRound[r - 1])]),
+  data: teams.map(t => [t.id, passByNum[t.num] || '', ...liveRounds.map(r => t.perRound[r])]),
   liveRounds
 })).digest('hex').slice(0, 16);
 
@@ -159,4 +160,4 @@ writeFileSync(OUT, JSON.stringify({
   roundNum, teams: pub, access, sig: plainSig,
   updated: new Date().toISOString()
 }, null, 1) + '\n');
-console.log(`wrote ${pub.length} teams (${access.length} logins), live through round ${roundNum || '—'}`);
+console.log(`wrote ${pub.length} teams (${access.length} logins), live through round ${roundNum ?? '—'}`);

@@ -60,7 +60,7 @@
         : Math.round(((Number(t.score) || 0) / maxScore) * 100)   // legacy shape
     }));
     return {
-      roundNum: Number(d.roundNum) || 0,
+      roundNum: (d.roundNum === null || d.roundNum === undefined) ? null : Number(d.roundNum),
       teams,
       access: Array.isArray(d.access) ? d.access : []
     };
@@ -151,7 +151,7 @@
     order.forEach((t, i) => rankOf[t.id] = i);
 
     renderPodium(order);
-    $('#roundChip').textContent = 'Updated · Round ' + (state.roundNum || '—');
+    $('#roundChip').textContent = 'Updated · Round ' + (state.roundNum ?? '—');
 
     if (order[0] && order[0].id !== leaderId) {
       if (leaderId !== null) {
@@ -273,7 +273,7 @@
       $('#lgOut').innerHTML = '<p class="lg-wait">No rounds are live yet — ranks appear here as rounds are published.</p>';
       return;
     }
-    if (!session.round || !p.rounds.some(r => r.r === session.round)) {
+    if (session.round == null || !p.rounds.some(r => r.r === session.round)) {
       session.round = p.rounds[p.rounds.length - 1].r;      // latest by default
     }
     roundsEl.innerHTML = p.rounds.map(r =>
