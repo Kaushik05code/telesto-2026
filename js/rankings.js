@@ -61,6 +61,7 @@
     }));
     return {
       roundNum: (d.roundNum === null || d.roundNum === undefined) ? null : Number(d.roundNum),
+      rounds: Array.isArray(d.rounds) ? d.rounds.map(Number) : null,
       teams,
       access: Array.isArray(d.access) ? d.access : []
     };
@@ -151,7 +152,11 @@
     order.forEach((t, i) => rankOf[t.id] = i);
 
     renderPodium(order);
-    $('#roundChip').textContent = 'Updated · Round ' + (state.roundNum ?? '—');
+    const rl = state.rounds;
+    const roundLabel = rl
+      ? (rl.length ? (rl.length > 1 ? 'Rounds ' : 'Round ') + rl.join(', ') : 'Round —')
+      : 'Round ' + (state.roundNum ?? '—');
+    $('#roundChip').textContent = 'Updated · ' + roundLabel;
 
     if (order[0] && order[0].id !== leaderId) {
       if (leaderId !== null) {

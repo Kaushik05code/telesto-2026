@@ -137,9 +137,9 @@ const plainSig = createHash('sha256').update(JSON.stringify({
 /* skip rewrite (and IV churn) when nothing that matters changed */
 let prev = null;
 if (existsSync(OUT)) { try { prev = JSON.parse(readFileSync(OUT, 'utf8')); } catch { } }
-const pubStr = JSON.stringify({ roundNum, teams: pub });
+const pubStr = JSON.stringify({ roundNum, rounds: liveRounds, teams: pub });
 if (prev && prev.sig === plainSig &&
-    JSON.stringify({ roundNum: prev.roundNum, teams: prev.teams }) === pubStr) {
+    JSON.stringify({ roundNum: prev.roundNum, rounds: prev.rounds || [], teams: prev.teams }) === pubStr) {
   console.log('no change — skipping write');
   process.exit(0);
 }
@@ -157,7 +157,7 @@ for (const t of teams) {
 }
 
 writeFileSync(OUT, JSON.stringify({
-  roundNum, teams: pub, access, sig: plainSig,
+  roundNum, rounds: liveRounds, teams: pub, access, sig: plainSig,
   updated: new Date().toISOString()
 }, null, 1) + '\n');
 console.log(`wrote ${pub.length} teams (${access.length} logins), live through round ${roundNum ?? '—'}`);
