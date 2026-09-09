@@ -126,7 +126,15 @@
       const now = Date.now();
       if (now >= start && now <= end) {
         box.classList.add('live-now');
-        box.innerHTML = '◐ The Singularity is live — <a href="rankings.html">follow the board</a>';
+        const day = now >= new Date('2026-09-10T00:00:00+05:30').getTime() ? 'Day Two' : 'Day One';
+        box.innerHTML = '<span class="livedot"></span><span>The Singularity is live · ' + day + '</span>';
+        // during the event, the board is the hero action
+        const gold = document.querySelector('.hero-cta .btn-gold');
+        const ghost = document.querySelector('.hero-cta .btn-ghost');
+        if (gold && ghost) {
+          gold.classList.replace('btn-gold', 'btn-ghost');
+          ghost.classList.replace('btn-ghost', 'btn-gold');
+        }
         return;
       }
       if (now > end) { box.remove(); return; }

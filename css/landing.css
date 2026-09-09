@@ -119,10 +119,17 @@
 .cd-sep{font-family:var(--f-mono);font-size:clamp(1.2rem,1rem + 1.6vw,1.9rem);
   color:var(--gold);line-height:1.1}
 .countdown.live-now{
-  font-family:var(--f-cere);color:var(--gold-light);font-size:1.05rem;
-  letter-spacing:.3em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:.9em;
+  font-family:var(--f-cere);font-weight:600;color:var(--gold-light);
+  font-size:clamp(.78rem,.7rem + .5vw,.98rem);
+  letter-spacing:.24em;text-transform:uppercase;white-space:nowrap;
+  border:1px solid var(--gold-hairline);border-radius:40px;
+  padding:.85em 1.7em;background:rgba(190,115,5,.09);
+  box-shadow:0 0 34px -6px rgba(230,187,126,.4);
 }
-.countdown.live-now a{color:inherit;text-decoration:underline}
+@media (max-width:480px){
+  .countdown.live-now{white-space:normal;text-align:center;justify-content:center}
+}
 .hero-cta{
   margin-top:2.6rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;
   opacity:0;animation:rise 1s .98s var(--ease) forwards;
